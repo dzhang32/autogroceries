@@ -10,7 +10,9 @@ $ pip install autoceries
 
 ## Usage
 
-- TODO
+```python
+import autoceries
+```
 
 ## Contributing
 
