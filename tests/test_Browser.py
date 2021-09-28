@@ -7,4 +7,4 @@ b = Browser("https://www.sainsburys.co.uk", driver)
 
 
 def test_browser():
-    assert b.url == "https://www.sainsburys.co.uk"
+    assert b .url == "https://www.sainsburys.co.uk"
