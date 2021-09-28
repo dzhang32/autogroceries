@@ -26,6 +26,14 @@ class SainsburyBrowser(Browser):
         )
         search.click()
 
+        # adding to the cart defaults to the first item, needs more
+        # complexity here
+        wait = WebDriverWait(self.driver, 5)
+        add = wait.until(EC.element_to_be_clickable(
+            (By.XPATH, "//button[text()='Add']"))
+        )
+        add.click()
+
     def open_sainsbury(self):
         self.open_driver()
         self.open_url()
