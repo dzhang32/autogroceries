@@ -39,10 +39,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python3 -m pip install poetry
-          python3 -m poetry build
-          python3 -m poetry config repositories.test-pypi https://test.pypi.org/legacy/
-          python3 -m poetry publish -r test-pypi
+          python3 -m pip install webdriver-manager
           python3 -m pip install --index-url https://test.pypi.org/simple/ autogroceries
 
       - name: Run unit testing
