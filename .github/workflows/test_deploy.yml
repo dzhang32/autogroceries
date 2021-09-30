@@ -45,14 +45,6 @@ jobs:
           ls
           python3 -m pip install pytest
           python3 -m pytest
-#      - name: Generate coverage report
-#        if: matrix.os == 'Ubuntu' && matrix.python == '3.9'
-#        run: |
-#          python3 -m pip install coverage
-#          coverage run --source=./ --rcfile=coverage.rc -m pytest && coverage report -m && coverage xml
-#      - name: Upload Coverage to Codecov
-#        if: matrix.os == 'Ubuntu' && matrix.python == '3.9'
-#        uses: codecov/codecov-action@v2
 
   deploy-package:
     # deploy-package only runs if tests pass
