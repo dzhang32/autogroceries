@@ -6,7 +6,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = u"autoceries"
+project = u"autogroceries"
 copyright = u"2021, David Zhang"
 author = u"David Zhang"
 

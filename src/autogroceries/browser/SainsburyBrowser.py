@@ -1,5 +1,5 @@
 import time
-from autoceries.browser import Browser
+from autogroceries.browser import Browser
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -83,7 +83,7 @@ class SainsburyBrowser(Browser):
 
 
 if __name__ == "__main__":
-    with open("/Users/david_zhang/dz_home/work/data_sci/autoceries/credentials.txt") as file:
+    with open("/Users/david_zhang/dz_home/work/data_sci/autogroceries/credentials.txt") as file:
         credentials = file.readlines()
     sb = SainsburyBrowser()
     sb.shop(credentials[0], credentials[1])

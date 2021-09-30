@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "autoceries"
+name = "autogroceries"
 version = "0.1.0"
 description = "Automate your grocery shop"
 authors = ["David Zhang"]

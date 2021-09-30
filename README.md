@@ -5,7 +5,7 @@ Automate your grocery shop
 ## Installation
 
 ```bash
-$ pip install autoceries
+$ pip install autogroceries
 ```
 
 ## Usage
