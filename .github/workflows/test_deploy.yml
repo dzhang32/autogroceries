@@ -1,0 +1,86 @@
+name: test-deploy-package
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  # modified from https://github.com/pypa/pip/blob/main/.github/workflows/ci.yml
+  test-package:
+
+    name: test / ${{ matrix.python }} / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}-latest
+
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [ Ubuntu, MacOS ]
+        python:
+          - 3.8
+          - 3.9
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Install Ubuntu dependencies
+        if: matrix.os == 'Ubuntu'
+        run: sudo apt-get install bzr
+
+      - name: Install MacOS dependencies
+        if: matrix.os == 'MacOS'
+        run: brew install bzr
+
+      - name: Check pip installation
+        run: |
+          python3 -m pip install git+https://github.com/dzhang32/autogroceries.git
+      - name: Run unit testing
+        run: |
+          ls
+          python3 -m pip install pytest
+          python3 -m pytest
+#      - name: Generate coverage report
+#        if: matrix.os == 'Ubuntu' && matrix.python == '3.9'
+#        run: |
+#          python3 -m pip install coverage
+#          coverage run --source=./ --rcfile=coverage.rc -m pytest && coverage report -m && coverage xml
+#      - name: Upload Coverage to Codecov
+#        if: matrix.os == 'Ubuntu' && matrix.python == '3.9'
+#        uses: codecov/codecov-action@v2
+
+  deploy-package:
+    # deploy-package only runs if tests pass
+    needs: test-package
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+
+      - name: Install dependencies
+        run: |
+          python3 -m pip install sphinx
+          python3 -m pip install sphinx-rtd-theme
+          python3 -m pip install git+https://github.com/dzhang32/pyutils.git
+      - name: Create sphinx documentation
+        run: |
+          cd docs
+          sphinx-apidoc -f -o source/ ../codino
+          make html
+          # needs an empty .nojekyll, otherwise doesn't render properly
+          # https://stackoverflow.com/questions/62626125/github-pages-with-sphinx-generated-documentation-not-displaying-html-correctly
+          cd build/html
+          touch .nojekyll
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@3.7.1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages # The branch the action should deploy to.
+          FOLDER: docs/build/html # The folder the action should deploy.
+          CLEAN: true # Automatically remove deleted files from the deploy branch
