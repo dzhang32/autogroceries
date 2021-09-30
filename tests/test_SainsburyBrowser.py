@@ -1,4 +1,4 @@
-from autoceries.browser import SainsburyBrowser
+from autogroceries.browser import SainsburyBrowser
 
 sb = SainsburyBrowser()
 

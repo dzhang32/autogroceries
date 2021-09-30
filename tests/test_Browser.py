@@ -1,4 +1,4 @@
-from autoceries.browser import Browser
+from autogroceries.browser import Browser
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 

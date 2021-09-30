@@ -41,7 +41,7 @@ jobs:
         run: |
           python3 -m pip install poetry
           python3 -m poetry install
-          
+
       - name: Run unit testing
         run: |
           ls
