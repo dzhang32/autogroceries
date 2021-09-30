@@ -1,4 +1,4 @@
-# autoceries
+# autogroceries
 
 Automate your grocery shop
 
@@ -11,7 +11,7 @@ $ pip install autogroceries
 ## Usage
 
 ```python
-import autoceries
+import autogroceries
 ```
 
 ## Contributing
@@ -20,8 +20,8 @@ Interested in contributing? Check out the contributing guidelines. Please note t
 
 ## License
 
-`autoceries` was created by David Zhang. It is licensed under the terms of the MIT license.
+`autogroceries` was created by David Zhang. It is licensed under the terms of the MIT license.
 
 ## Credits
 
-`autoceries` was created with [`cookiecutter`](https://cookiecutter.readthedocs.io/en/latest/) and the `py-pkgs-cookiecutter` [template](https://github.com/py-pkgs/py-pkgs-cookiecutter).
+`autogroceries` was created with [`cookiecutter`](https://cookiecutter.readthedocs.io/en/latest/) and the `py-pkgs-cookiecutter` [template](https://github.com/py-pkgs/py-pkgs-cookiecutter).
