@@ -37,9 +37,11 @@ jobs:
         if: matrix.os == 'MacOS'
         run: brew install bzr
 
-      - name: Check pip installation
+      - name: Install dependencies
         run: |
-          python3 -m pip install git+https://github.com/dzhang32/autogroceries.git
+          python3 -m pip install poetry
+          python3 -m poetry install
+          
       - name: Run unit testing
         run: |
           ls
@@ -59,7 +61,6 @@ jobs:
         run: |
           python3 -m pip install sphinx
           python3 -m pip install sphinx-rtd-theme
-          python3 -m pip install git+https://github.com/dzhang32/autogroceries.git
       - name: Create sphinx documentation
         run: |
           cd docs
