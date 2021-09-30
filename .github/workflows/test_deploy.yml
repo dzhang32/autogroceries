@@ -40,6 +40,7 @@ jobs:
       - name: Install dependencies
         run: |
           python3 -m pip install webdriver-manager
+          python3 -m pip install selenium
           python3 -m pip install --index-url https://test.pypi.org/simple/ autogroceries
 
       - name: Run unit testing
