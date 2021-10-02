@@ -1,11 +1,11 @@
 import time
-from autogroceries.browser import Browser
+from autogroceries.shopper import Shopper
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 
 
-class SainsburyBrowser(Browser):
+class SainsburyShopper(Shopper):
     def __init__(self):
         sainsbury_url = "https://www.sainsburys.co.uk"
 
@@ -42,7 +42,7 @@ class SainsburyBrowser(Browser):
         time.sleep(1)
 
     def accept_cookies(self):
-        # wait for up to 10 seconds for the cookies box to be clickable
+        # wait for few seconds for the cookies box to become clickable
         wait = WebDriverWait(self.driver, 5)
         accept_box = wait.until(EC.element_to_be_clickable(
             (By.XPATH, "//button[text()='Accept All Cookies']"))
@@ -85,5 +85,5 @@ class SainsburyBrowser(Browser):
 if __name__ == "__main__":
     with open("/Users/david_zhang/dz_home/work/data_sci/autogroceries/credentials.txt") as file:
         credentials = file.readlines()
-    sb = SainsburyBrowser()
+    sb = SainsburyShopper()
     sb.shop(credentials[0], credentials[1])

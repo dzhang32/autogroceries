@@ -2,7 +2,7 @@ from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 
 
-class Browser():
+class Shopper():
     def __init__(self, url):
         self._url = url
         self._webdriver = webdriver
@@ -46,7 +46,7 @@ class Browser():
 
 
 if __name__ == "__main__":
-    b = Browser("https://www.sainsburys.co.uk")
+    b = Shopper("https://www.sainsburys.co.uk")
     # b.open_driver()
     b.open_site()
     b.close_driver()
