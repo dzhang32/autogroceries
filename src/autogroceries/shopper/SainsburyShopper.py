@@ -1,5 +1,6 @@
 import time
 from autogroceries.shopper import Shopper
+from autogroceries.selector import SainsburySelector
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -20,18 +21,16 @@ class SainsburyShopper(Shopper):
         self._login(username, password)
         self._search("ice cream")
 
-        self.
-
-        return self._add_to_cart()
+        return self.selector
 
     def _add_to_cart(self):
         # adding to the cart defaults to the first item, needs more
         # complexity here
 
 
-        # add = wait.until(EC.elements_to_be_clickable(
-        #     (By.XPATH, "//button[text()='Add']"))
-        # )
+        add = wait.until(EC.elements_to_be_clickable(
+            (By.XPATH, "//button[text()='Add']"))
+        )
         return favourites
 
     def _open_sainsbury(self):
@@ -90,9 +89,13 @@ class SainsburyShopper(Shopper):
         )
         search.click()
 
+    def _pick_food(self):
+
+
 if __name__ == "__main__":
     with open("/Users/david_zhang/dz_home/work/data_sci/autogroceries/credentials.txt") as file:
         credentials = file.readlines()
     sb = SainsburyShopper()
     x = sb.shop(credentials[0], credentials[1])
-    print(type(x))
+    print(type(x.source))
+    print(type(x.soup))
