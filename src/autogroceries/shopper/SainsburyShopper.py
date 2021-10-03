@@ -30,9 +30,12 @@ class SainsburyShopper(Shopper):
             self._search_item(item)
             item_options = self._find_item_elements()
             selected_item = self._select_item(item_options)
-            self._clear_search(item)
-            item_info = self._get_item_details(selected_item)
-            added.append(item_info)
+            if selected_item is None:
+                added.append("Not found")
+            else:
+                self._clear_search(item)
+                item_info = self._get_item_details(selected_item)
+                added.append(item_info)
 
         return added
 
@@ -96,7 +99,11 @@ class SainsburyShopper(Shopper):
 
     def _find_item_elements(self):
         try:
-            item_options = self.driver.find_elements_by_xpath(
+            # select the first ln-o-grid... there's 2 on the page
+            item_options = self.driver.find_element_by_xpath(
+                "//ul[@class='ln-o-grid ln-o-grid--matrix ln-o-grid--equal-height']"
+            )
+            item_options = item_options.find_elements_by_xpath(
                  "//div[@class='ln-c-card pt']"
              )
             print(len(item_options))
@@ -124,18 +131,23 @@ class SainsburyShopper(Shopper):
             try:
                 item.find_element_by_xpath("//button[@class='pt__icons__fav']")
                 selected_item = item
+                # item_info = selected_item.find_element_by_xpath(
+                #     "//a[@class='pt__link']")
+                # item_name = item_info.get_attribute("innerHTML")
+                # print(item_name)
                 fav = True
-                break
             except NoSuchElementException:
+                print("missing")
                 continue
 
         # if we don't find a favourite, then select the first
         if not fav:
+            print("no fav")
             selected_item = item_options[0]
 
         return selected_item
 
-    def _add_item():
+    def _add_item(self):
         pass
 
     @staticmethod
@@ -161,10 +173,9 @@ if __name__ == "__main__":
     with open("/Users/david_zhang/Downloads/shopping_list_dz.txt") as file:
         shopping_list = file.readlines()
 
-    shopping_list = [j for i, j in enumerate(shopping_list) if 5 > i > 0]
+    shopping_list = [j for i, j in enumerate(shopping_list) if 10 > i > 0]
     shopping_list = [j[:-3] for j in shopping_list]
 
     sb = SainsburyShopper(shopping_list)
-    print(sb.items)
     x = sb.shop(credentials[0], credentials[1])
     print(x)
