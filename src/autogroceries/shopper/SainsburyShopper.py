@@ -3,6 +3,8 @@ from autogroceries.shopper import Shopper
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import TimeoutException
 
 
 class SainsburyShopper(Shopper):
@@ -14,33 +16,31 @@ class SainsburyShopper(Shopper):
 
     def shop(self, username, password):
         self._open_sainsbury()
-        self._accept_cookies()
         self._to_login()
         self._login(username, password)
-        self._add_to_cart("tomato")
+        self._search("ice cream")
 
-    def _add_to_cart(self, item):
-        search = self.driver.find_element_by_id("search-bar-input")
-        search.send_keys(item)
-        search = self.driver.find_element_by_xpath(
-            "//button[@class='search-bar__button']"
-        )
-        search.click()
+        self.
 
+        return self._add_to_cart()
+
+    def _add_to_cart(self):
         # adding to the cart defaults to the first item, needs more
         # complexity here
-        wait = WebDriverWait(self.driver, 5)
-        add = wait.until(EC.element_to_be_clickable(
-            (By.XPATH, "//button[text()='Add']"))
-        )
-        add.click()
+
+
+        # add = wait.until(EC.elements_to_be_clickable(
+        #     (By.XPATH, "//button[text()='Add']"))
+        # )
+        return favourites
 
     def _open_sainsbury(self):
-        self.open_driver()
-        self.open_url()
+        self._open_driver()
+        self._open_url()
 
         # wait a second for page to load
         time.sleep(1)
+        self._accept_cookies()
 
     def _accept_cookies(self):
         # wait for few seconds for the cookies box to become clickable
@@ -59,7 +59,7 @@ class SainsburyShopper(Shopper):
         groceries.click()
 
     def _login(self, username, password):
-        self.accept_cookies()
+        self._accept_cookies()
 
         # enter UN and PW
         un = self.driver.find_element_by_id("username")
@@ -79,12 +79,20 @@ class SainsburyShopper(Shopper):
                 (By.XPATH, "//button[text()='Continue']"))
             )
             cont.click()
-        except:
+        except (NoSuchElementException, TimeoutException):
             pass
 
+    def _search(self, item):
+        search = self.driver.find_element_by_id("search-bar-input")
+        search.send_keys(item)
+        search = self.driver.find_element_by_xpath(
+            "//button[@class='search-bar__button']"
+        )
+        search.click()
 
 if __name__ == "__main__":
     with open("/Users/david_zhang/dz_home/work/data_sci/autogroceries/credentials.txt") as file:
         credentials = file.readlines()
     sb = SainsburyShopper()
-    sb.shop(credentials[0], credentials[1])
+    x = sb.shop(credentials[0], credentials[1])
+    print(type(x))

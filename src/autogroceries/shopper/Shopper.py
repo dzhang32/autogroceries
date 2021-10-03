@@ -29,15 +29,15 @@ class Shopper():
     def driver(self):
         return self._driver
 
-    def open_driver(self):
+    def _open_driver(self):
         driver = self.webdriver.Chrome(self.webdriver_manager.install())
         self._driver = driver
 
-    def open_url(self):
+    def _open_url(self):
         self._check_driver_is_not_none()
         self.driver.get(self.url)
 
-    def close_driver(self):
+    def _close_driver(self):
         self._driver.close()
 
     def _check_driver_is_not_none(self):

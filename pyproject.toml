@@ -10,6 +10,7 @@ readme = "README.md"
 python = "^3.8"
 selenium = "^3.141.0"
 webdriver-manager = "^3.4.2"
+bs4 = "^0.0.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
