@@ -5,6 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.common.keys import Keys
 
 
@@ -20,11 +21,19 @@ class SainsburyShopper(Shopper):
         self._to_login()
         self._login(username, password)
         self._search_item("tomato")
-        time.sleep(5)
-        options = self._pick_food()
+        item_options = self._find_item_elements()
+        print(len(item_options))
+        selected_item = self._select_item(item_options)
+        self._get_item_details(selected_item)
         self._clear_search("tomato")
+        self._search_item("ice cream")
+        item_options = self._find_item_elements()
+        selected_item = self._select_item(item_options)
+        self._get_item_details(selected_item)
 
-        return options
+        return selected_item
+
+
 
     def _open_sainsbury(self):
         self._open_driver()
@@ -75,20 +84,63 @@ class SainsburyShopper(Shopper):
             pass
 
     def _search_item(self, item):
+        print("Searching for " + item)
         search = self.driver.find_element_by_id("search-bar-input")
         search.send_keys(item)
         search = self.driver.find_element_by_xpath(
             "//button[@class='search-bar__button']"
         )
         search.click()
+        time.sleep(2)
 
-    def _pick_food(self):
-        # try to find any favourite elements
-        options = self.driver.find_elements_by_xpath(
-             "//div[@class='ln-c-card pt']"
-         )
+    def _find_item_elements(self):
+        try:
+            item_options = self.driver.find_elements_by_xpath(
+                 "//div[@class='ln-c-card pt']"
+             )
+            print(len(item_options))
+            # for now, select the first 5 options - TODO make this user selected
+            if len(item_options) > 5:
+                item_options = [e for i, e in enumerate(item_options) if i < 5]
 
-        return options
+        except NoSuchElementException:
+            item_options = None
+
+        return item_options
+
+    @staticmethod
+    def _select_item(item_options):
+        # if we have 0 or 1 options, no need to search for favourites
+        if item_options is None:
+            print("Unable to find item")
+            return None
+        elif len(item_options) == 1:
+            return item_options[0]
+
+        fav = False
+        # otherwise, look for a favourite item
+        for item in item_options:
+            try:
+                item.find_element_by_xpath("//button[@class='pt__icons__fav']")
+                selected_item = item
+                fav = True
+                break
+            except NoSuchElementException:
+                continue
+
+        # if we don't find a favourite, then select the first
+        if not fav:
+            selected_item = item_options[0]
+
+        return selected_item
+
+    def _add_item():
+        pass
+
+    @staticmethod
+    def _get_item_details(selected_item):
+        info = selected_item.find_element_by_xpath("//a[@class='pt__link']")
+        print(info.get_attribute("innerHTML"))
 
     def _clear_search(self, item):
         search = self.driver.find_element_by_id("search-bar-input")
@@ -103,8 +155,3 @@ if __name__ == "__main__":
         credentials = file.readlines()
     sb = SainsburyShopper()
     options = sb.shop(credentials[0], credentials[1])
-    option_0 = options[0]
-    option_0.find_element_by_xpath("//button[@class='pt__icons__fav']")
-    name = option_0.find_element_by_xpath("//a[@class='pt__link']")
-    add = option_0.find_element_by_xpath(
-        "//button[@data-test-id='add-button']")
