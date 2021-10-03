@@ -1,11 +1,11 @@
 import time
 from autogroceries.shopper import Shopper
-from autogroceries.selector import SainsburySelector
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.common.keys import Keys
 
 
 class SainsburyShopper(Shopper):
@@ -19,19 +19,12 @@ class SainsburyShopper(Shopper):
         self._open_sainsbury()
         self._to_login()
         self._login(username, password)
-        self._search("ice cream")
+        self._search_item("tomato")
+        time.sleep(5)
+        options = self._pick_food()
+        self._clear_search("tomato")
 
-        return self.selector
-
-    def _add_to_cart(self):
-        # adding to the cart defaults to the first item, needs more
-        # complexity here
-
-
-        add = wait.until(EC.elements_to_be_clickable(
-            (By.XPATH, "//button[text()='Add']"))
-        )
-        return favourites
+        return options
 
     def _open_sainsbury(self):
         self._open_driver()
@@ -81,7 +74,7 @@ class SainsburyShopper(Shopper):
         except (NoSuchElementException, TimeoutException):
             pass
 
-    def _search(self, item):
+    def _search_item(self, item):
         search = self.driver.find_element_by_id("search-bar-input")
         search.send_keys(item)
         search = self.driver.find_element_by_xpath(
@@ -90,12 +83,28 @@ class SainsburyShopper(Shopper):
         search.click()
 
     def _pick_food(self):
+        # try to find any favourite elements
+        options = self.driver.find_elements_by_xpath(
+             "//div[@class='ln-c-card pt']"
+         )
 
+        return options
+
+    def _clear_search(self, item):
+        search = self.driver.find_element_by_id("search-bar-input")
+
+        # https://stackoverflow.com/questions/7732125/clear-text-from-textarea-with-selenium
+        # methods using .clear() or .sendKeys(Keys.CONTROL + "a") didn't work
+        for i in range(len(item)):
+            search.send_keys(Keys.BACK_SPACE)
 
 if __name__ == "__main__":
     with open("/Users/david_zhang/dz_home/work/data_sci/autogroceries/credentials.txt") as file:
         credentials = file.readlines()
     sb = SainsburyShopper()
-    x = sb.shop(credentials[0], credentials[1])
-    print(type(x.source))
-    print(type(x.soup))
+    options = sb.shop(credentials[0], credentials[1])
+    option_0 = options[0]
+    option_0.find_element_by_xpath("//button[@class='pt__icons__fav']")
+    name = option_0.find_element_by_xpath("//a[@class='pt__link']")
+    add = option_0.find_element_by_xpath(
+        "//button[@data-test-id='add-button']")
