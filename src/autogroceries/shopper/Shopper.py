@@ -2,9 +2,10 @@ from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 
 
-class Shopper():
-    def __init__(self, url):
+class Shopper:
+    def __init__(self, url, items):
         self._url = url
+        self._items = items
         self._webdriver = webdriver
         self._webdriver_manager = ChromeDriverManager()
         self._driver = None
@@ -12,6 +13,10 @@ class Shopper():
     @property
     def url(self):
         return self._url
+
+    @property
+    def items(self):
+        return self._items
 
     @property
     def webdriver(self):

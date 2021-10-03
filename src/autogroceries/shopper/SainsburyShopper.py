@@ -11,29 +11,30 @@ from selenium.webdriver.common.keys import Keys
 
 class SainsburyShopper(Shopper):
 
-    def __init__(self):
+    def __init__(self, items):
         sainsbury_url = "https://www.sainsburys.co.uk"
 
-        super().__init__(sainsbury_url)
+        super().__init__(sainsbury_url, items)
 
     def shop(self, username, password):
         self._open_sainsbury()
         self._to_login()
         self._login(username, password)
-        self._search_item("tomato")
-        item_options = self._find_item_elements()
-        print(len(item_options))
-        selected_item = self._select_item(item_options)
-        self._get_item_details(selected_item)
-        self._clear_search("tomato")
-        self._search_item("ice cream")
-        item_options = self._find_item_elements()
-        selected_item = self._select_item(item_options)
-        self._get_item_details(selected_item)
+        added = self._add_items_to_cart()
 
-        return selected_item
+        return added
 
+    def _add_items_to_cart(self):
+        added = list()
+        for item in self.items:
+            self._search_item(item)
+            item_options = self._find_item_elements()
+            selected_item = self._select_item(item_options)
+            self._clear_search(item)
+            item_info = self._get_item_details(selected_item)
+            added.append(item_info)
 
+        return added
 
     def _open_sainsbury(self):
         self._open_driver()
@@ -139,8 +140,10 @@ class SainsburyShopper(Shopper):
 
     @staticmethod
     def _get_item_details(selected_item):
-        info = selected_item.find_element_by_xpath("//a[@class='pt__link']")
-        print(info.get_attribute("innerHTML"))
+        item_info = selected_item.find_element_by_xpath("//a[@class='pt__link']")
+        item_name = item_info.get_attribute("innerHTML")
+
+        return item_name
 
     def _clear_search(self, item):
         search = self.driver.find_element_by_id("search-bar-input")
@@ -150,8 +153,18 @@ class SainsburyShopper(Shopper):
         for i in range(len(item)):
             search.send_keys(Keys.BACK_SPACE)
 
+
 if __name__ == "__main__":
+
     with open("/Users/david_zhang/dz_home/work/data_sci/autogroceries/credentials.txt") as file:
         credentials = file.readlines()
-    sb = SainsburyShopper()
-    options = sb.shop(credentials[0], credentials[1])
+    with open("/Users/david_zhang/Downloads/shopping_list_dz.txt") as file:
+        shopping_list = file.readlines()
+
+    shopping_list = [j for i, j in enumerate(shopping_list) if 5 > i > 0]
+    shopping_list = [j[:-3] for j in shopping_list]
+
+    sb = SainsburyShopper(shopping_list)
+    print(sb.items)
+    x = sb.shop(credentials[0], credentials[1])
+    print(x)
