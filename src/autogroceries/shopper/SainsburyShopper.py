@@ -154,6 +154,7 @@ class SainsburyShopper(Shopper):
 
     @staticmethod
     def _get_item_details(selected_item):
+        # needs to look in the current node, hence prefix with "." in ".//"
         item_info = selected_item.find_element_by_xpath(
             ".//a[@class='pt__link']"
         )
