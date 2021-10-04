@@ -1,19 +1,19 @@
 import time
 from autogroceries.shopper import Shopper
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.common.keys import Keys
 
 
 class SainsburyShopper(Shopper):
 
-    def __init__(self, items):
+    def __init__(self, items, n_items=None):
         sainsbury_url = "https://www.sainsburys.co.uk"
 
-        super().__init__(sainsbury_url, items)
+        super().__init__(sainsbury_url, items, n_items)
 
     def test(self, username, password):
         self._open_sainsbury()
@@ -32,7 +32,7 @@ class SainsburyShopper(Shopper):
 
     def _add_items_to_cart(self):
         added = list()
-        for item in self.items:
+        for n, item in zip(self.n_items, self.items):
             self._search_item(item)
             item_options = self._find_item_elements()
             if item_options is None:
@@ -41,6 +41,7 @@ class SainsburyShopper(Shopper):
                 selected_item = self._select_item(item_options)
                 item_info = self._get_item_details(selected_item)
                 added.append(item_info)
+                self._add_item(selected_item, n)
                 self._clear_search(item)
 
         return added
@@ -107,12 +108,13 @@ class SainsburyShopper(Shopper):
         try:
             # select the first ln-o-grid... there's 2 on the page
             item_options = self.driver.find_element_by_xpath(
-                "//ul[@class='ln-o-grid ln-o-grid--matrix ln-o-grid--equal-height']"
+                "//ul[@class='ln-o-grid" + " " +
+                "ln-o-grid--matrix" + " " +
+                "ln-o-grid--equal-height']"
             )
             item_options = item_options.find_elements_by_xpath(
                  "//div[@class='ln-c-card pt']"
              )
-            print(len(item_options))
             # for now, select the first 5 options - TODO make this user selected
             if len(item_options) > 5:
                 item_options = [e for i, e in enumerate(item_options) if i < 5]
@@ -128,29 +130,39 @@ class SainsburyShopper(Shopper):
         if len(item_options) == 1:
             return item_options[0]
 
-        fav = False
-        # otherwise, look for a favourite item
+        # by default let's select the first item available
+        selected_item = item_options[0]
+
+        # then, let's look for a favourite item
         for item in item_options:
             try:
                 # .// needed here, the . refers to ONLY search the current node
                 # https://github.com/seleniumhq/selenium-google-code-issue-archive/issues/5819
                 item.find_element_by_xpath(".//button[@class='pt__icons__fav']")
                 selected_item = item
-                fav = True
                 break
             except NoSuchElementException:
-                print("missing fav")
                 continue
-
-        # if we don't find a favourite, then select the first
-        if not fav:
-            print("no fav")
-            selected_item = item_options[0]
 
         return selected_item
 
-    def _add_item(self):
-        pass
+    @staticmethod
+    def _add_item(selected_item, n):
+        # only definitely works for an empty trolley
+        # TODO - add functionality for when item has already been added N times
+        add = selected_item.find_element_by_xpath(
+            ".//button[@data-test-id='add-button']"
+        )
+        add.click()
+        time.sleep(2)
+
+        if n > 1:
+            for i in range(n - 1):
+
+                add_more = selected_item.find_element_by_xpath(
+                    ".//button[@data-test-id='pt-button-inc']"
+                )
+                add_more.click()
 
     @staticmethod
     def _get_item_details(selected_item):
@@ -178,9 +190,9 @@ if __name__ == "__main__":
     with open("/Users/david_zhang/Downloads/shopping_list_dz.txt") as file:
         shopping_list = file.readlines()
 
-    shopping_list = [j[:-3] for i, j in enumerate(shopping_list) if 5 > i > 0]
+    shopping_list = [j[:-3] for i, j in enumerate(shopping_list) if 2 > i > 0]
 
-    sb = SainsburyShopper(shopping_list)
+    sb = SainsburyShopper(["tomato", "lemon"], [2, 3])
     x = sb.shop(credentials[0], credentials[1])
     print(x)
 
