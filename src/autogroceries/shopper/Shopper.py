@@ -24,6 +24,9 @@ class Shopper:
         # placeholder for setting up a chromedriver
         self._driver = None
 
+    def close_driver(self):
+        self.driver.close()
+
     @property
     def url(self):
         return self._url
@@ -87,12 +90,9 @@ class Shopper:
         self._check_driver_is_not_none()
         self.driver.get(self.url)
 
-    def _close_driver(self):
-        self._driver.close()
-
     def _check_driver_is_not_none(self):
         if self.driver is None:
-            raise ValueError("driver has not yet been initialised")
+            raise ValueError("driver has not yet been opened")
 
     @staticmethod
     def _check_headless(headless):
@@ -116,10 +116,3 @@ class Shopper:
                 raise TypeError("n_items must be a list of int elements")
             elif len(n_items) != 1 and len(n_items) != len(items):
                 raise ValueError("length of n_items and items must be equal")
-
-
-if __name__ == "__main__":
-
-    b = Shopper("https://www.sainsburys.co.uk", items = ["something", "else"])
-    print(b.items)
-    print(b.n_items)
