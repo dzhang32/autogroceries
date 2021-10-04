@@ -13,7 +13,11 @@ class Shopper:
         self.n_items = self._n_items
 
         self._webdriver = webdriver
+
+        # currently only allows chrome - TODO: add other browsers
         self._webdriver_manager = ChromeDriverManager()
+
+        # placeholder for setting up a chromedriver
         self._driver = None
 
     @property

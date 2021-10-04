@@ -15,14 +15,6 @@ class SainsburyShopper(Shopper):
 
         super().__init__(sainsbury_url, items, n_items)
 
-    def test(self, username, password):
-        self._open_sainsbury()
-        self._to_login()
-        self._login(username, password)
-        self._search_item("lemon")
-
-        return self
-
     def shop(self, username, password):
         self._open_sainsbury()
         self._to_login()
