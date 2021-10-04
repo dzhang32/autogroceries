@@ -3,18 +3,22 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 
 class Shopper:
-    def __init__(self, url, items, n_items = None):
+    def __init__(self, url, items, n_items = None, headless = False):
+        self._url = url
+
+        self._check_headless(headless)
+        self._headless = headless
+
         self._check_items(items)
         self._check_n_items(items, n_items)
-
-        self._url = url
         self._items = items
         self._n_items = n_items
         self.n_items = self._n_items
 
+        # TODO: refactor the usage of webdriver - should I store entire module?
         self._webdriver = webdriver
 
-        # currently only allows chrome - TODO: add other browsers
+        # TODO: add other browsers?
         self._webdriver_manager = ChromeDriverManager()
 
         # placeholder for setting up a chromedriver
@@ -23,6 +27,15 @@ class Shopper:
     @property
     def url(self):
         return self._url
+
+    @property
+    def headless(self):
+        return self._headless
+
+    @headless.setter
+    def headless(self, value):
+        self._check_headless(value)
+        self._headless = value
 
     @property
     def items(self):
@@ -52,6 +65,40 @@ class Shopper:
     def driver(self):
         return self._driver
 
+    def _open_driver(self):
+        if self.headless:
+            # TODO: ugly nested call, may rethink - pass options as arg?
+            opts = self.webdriver.ChromeOptions()
+            opts.add_argument("--headless")
+
+            # need to set user-agent otherwise headless browser is blocked
+            # https://intoli.com/blog/making-chrome-headless-undetectable/
+            ua = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36" + \
+                 " (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36"
+            opts.add_argument(f"user-agent={ua}")
+            driver = self.webdriver.Chrome(self.webdriver_manager.install(),
+                                           options = opts)
+        else:
+            driver = self.webdriver.Chrome(self.webdriver_manager.install())
+
+        self._driver = driver
+
+    def _open_url(self):
+        self._check_driver_is_not_none()
+        self.driver.get(self.url)
+
+    def _close_driver(self):
+        self._driver.close()
+
+    def _check_driver_is_not_none(self):
+        if self.driver is None:
+            raise ValueError("driver has not yet been initialised")
+
+    @staticmethod
+    def _check_headless(headless):
+        if type(headless) is not bool:
+            raise TypeError("headless must be a boolean")
+
     @staticmethod
     def _check_items(items):
         if type(items) is not list:
@@ -70,24 +117,9 @@ class Shopper:
             elif len(n_items) != 1 and len(n_items) != len(items):
                 raise ValueError("length of n_items and items must be equal")
 
-    def _open_driver(self):
-        driver = self.webdriver.Chrome(self.webdriver_manager.install())
-        self._driver = driver
-
-    def _open_url(self):
-        self._check_driver_is_not_none()
-        self.driver.get(self.url)
-
-    def _close_driver(self):
-        self._driver.close()
-
-    def _check_driver_is_not_none(self):
-        if self.driver is None:
-            raise ValueError("driver has not yet been initialised")
-
-
 
 if __name__ == "__main__":
+
     b = Shopper("https://www.sainsburys.co.uk", items = ["something", "else"])
     print(b.items)
     print(b.n_items)
