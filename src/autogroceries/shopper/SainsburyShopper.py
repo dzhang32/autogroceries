@@ -5,7 +5,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import TimeoutException
-from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.common.keys import Keys
 
 
@@ -16,12 +15,19 @@ class SainsburyShopper(Shopper):
 
         super().__init__(sainsbury_url, items)
 
+    def test(self, username, password):
+        self._open_sainsbury()
+        self._to_login()
+        self._login(username, password)
+        self._search_item("lemon")
+
+        return self
+
     def shop(self, username, password):
         self._open_sainsbury()
         self._to_login()
         self._login(username, password)
         added = self._add_items_to_cart()
-
         return added
 
     def _add_items_to_cart(self):
@@ -29,13 +35,13 @@ class SainsburyShopper(Shopper):
         for item in self.items:
             self._search_item(item)
             item_options = self._find_item_elements()
-            selected_item = self._select_item(item_options)
-            if selected_item is None:
+            if item_options is None:
                 added.append("Not found")
             else:
-                self._clear_search(item)
+                selected_item = self._select_item(item_options)
                 item_info = self._get_item_details(selected_item)
                 added.append(item_info)
+                self._clear_search(item)
 
         return added
 
@@ -118,26 +124,22 @@ class SainsburyShopper(Shopper):
 
     @staticmethod
     def _select_item(item_options):
-        # if we have 0 or 1 options, no need to search for favourites
-        if item_options is None:
-            print("Unable to find item")
-            return None
-        elif len(item_options) == 1:
+        # if we only have 1 option, no need to search for favourites
+        if len(item_options) == 1:
             return item_options[0]
 
         fav = False
         # otherwise, look for a favourite item
         for item in item_options:
             try:
-                item.find_element_by_xpath("//button[@class='pt__icons__fav']")
+                # .// needed here, the . refers to ONLY search the current node
+                # https://github.com/seleniumhq/selenium-google-code-issue-archive/issues/5819
+                item.find_element_by_xpath(".//button[@class='pt__icons__fav']")
                 selected_item = item
-                # item_info = selected_item.find_element_by_xpath(
-                #     "//a[@class='pt__link']")
-                # item_name = item_info.get_attribute("innerHTML")
-                # print(item_name)
                 fav = True
+                break
             except NoSuchElementException:
-                print("missing")
+                print("missing fav")
                 continue
 
         # if we don't find a favourite, then select the first
@@ -152,7 +154,9 @@ class SainsburyShopper(Shopper):
 
     @staticmethod
     def _get_item_details(selected_item):
-        item_info = selected_item.find_element_by_xpath("//a[@class='pt__link']")
+        item_info = selected_item.find_element_by_xpath(
+            ".//a[@class='pt__link']"
+        )
         item_name = item_info.get_attribute("innerHTML")
 
         return item_name
@@ -173,9 +177,10 @@ if __name__ == "__main__":
     with open("/Users/david_zhang/Downloads/shopping_list_dz.txt") as file:
         shopping_list = file.readlines()
 
-    shopping_list = [j for i, j in enumerate(shopping_list) if 10 > i > 0]
-    shopping_list = [j[:-3] for j in shopping_list]
+    shopping_list = [j[:-3] for i, j in enumerate(shopping_list) if 5 > i > 0]
 
     sb = SainsburyShopper(shopping_list)
     x = sb.shop(credentials[0], credentials[1])
     print(x)
+
+
