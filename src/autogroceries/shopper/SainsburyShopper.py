@@ -1,4 +1,3 @@
-import time
 from autogroceries.shopper import Shopper
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -46,12 +45,11 @@ class SainsburyShopper(Shopper):
         self._open_url()
 
         # wait a second for page to load
-        time.sleep(1)
         self._accept_cookies()
 
     def _accept_cookies(self):
         # wait for few seconds for the cookies box to become clickable
-        wait = WebDriverWait(self.driver, 5)
+        wait = WebDriverWait(self.driver, 3)
         accept_box = wait.until(EC.element_to_be_clickable(
             (By.XPATH, "//button[text()='Accept All Cookies']"))
         )
@@ -81,7 +79,7 @@ class SainsburyShopper(Shopper):
         # to get around this - some potential for automation
         # currently must enter manually
         try:
-            wait = WebDriverWait(self.driver, 5)
+            wait = WebDriverWait(self.driver, 2)
             cont = wait.until(EC.element_to_be_clickable(
                 (By.XPATH, "//button[text()='Continue']"))
             )
@@ -97,7 +95,6 @@ class SainsburyShopper(Shopper):
             "//button[@class='search-bar__button']"
         )
         search.click()
-        time.sleep(2)
 
     def _check_popup(self):
         try:
@@ -110,16 +107,17 @@ class SainsburyShopper(Shopper):
 
     def _find_item_elements(self):
         try:
-            # look for the Category button, only appears once search has loaded
+            # look for the 'Category' button panel
+            # only appears once search has loaded
             wait = WebDriverWait(self.driver, 3)
             wait.until(EC.element_to_be_clickable(
                 (By.XPATH,
-                 "//div[@class='product-filter__row--items skipto-content__focus']"))
+                 "//div[@class='product-filter__row--items " +
+                 "skipto-content__focus']"))
             )
         except TimeoutException:
             return None
 
-        print("found!")
         item_options = self.driver.find_elements_by_xpath(
                 "//div[@class='ln-c-card pt']"
         )
@@ -152,21 +150,27 @@ class SainsburyShopper(Shopper):
 
         return selected_item
 
-    @staticmethod
-    def _add_item(selected_item, n):
-        # only definitely works for an empty trolley
-        # TODO - add functionality for when item has already been added N times
-        add = selected_item.find_element_by_xpath(
-            ".//button[@data-test-id='add-button']"
-        )
-        add.click()
-        time.sleep(1)
+    def _add_item(self, selected_item, n):
+        try:
+            # add button is not found if the item has been already added
+            # this try/except allows us to add items already present in basket
+            add = selected_item.find_element_by_xpath(
+                ".//button[@data-test-id='add-button']"
+            )
+            add.click()
+            # take 1 away from n as we add 1
+            n -= 1
+        except NoSuchElementException:
+            pass
 
-        if n > 1:
-            for i in range(n - 1):
-                add_more = selected_item.find_element_by_xpath(
-                    ".//button[@data-test-id='pt-button-inc']"
-                )
+        # if we still need to add more, click increment for n times
+        if n > 0:
+            wait = WebDriverWait(self.driver, 3)
+            add_more = wait.until(EC.element_to_be_clickable(
+                (By.XPATH, ".//button[@data-test-id='pt-button-inc']"))
+            )
+
+            for i in range(n):
                 add_more.click()
 
     @staticmethod
