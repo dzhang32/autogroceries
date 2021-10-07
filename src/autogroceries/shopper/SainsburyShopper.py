@@ -34,7 +34,8 @@ class SainsburyShopper(Shopper):
                 item_info = self._get_item_details(selected_item)
                 added.append(item_info)
                 self._add_item(selected_item, n)
-                self._clear_search(item)
+
+            self._clear_search(item)
 
         return added
 
@@ -97,22 +98,17 @@ class SainsburyShopper(Shopper):
         time.sleep(2)
 
     def _find_item_elements(self):
-        try:
-            # select the first ln-o-grid... there's 2 on the page
-            item_options = self.driver.find_element_by_xpath(
-                "//ul[@class='ln-o-grid" + " " +
-                "ln-o-grid--matrix" + " " +
-                "ln-o-grid--equal-height']"
-            )
-            item_options = item_options.find_elements_by_xpath(
-                 "//div[@class='ln-c-card pt']"
-             )
-            # for now, select the first 5 options - TODO make this user selected
-            if len(item_options) > 5:
-                item_options = [e for i, e in enumerate(item_options) if i < 5]
+        item_options = self.driver.find_elements_by_xpath(
+                "//div[@class='ln-c-card pt']"
+        )
 
-        except NoSuchElementException:
+        # if no elements found return None
+        if len(item_options) == 0:
             item_options = None
+
+        # for now, select the first 5 options - TODO make this user selected
+        elif len(item_options) > 5:
+            item_options = [e for i, e in enumerate(item_options) if i < 5]
 
         return item_options
 
@@ -179,12 +175,14 @@ if __name__ == "__main__":
 
     with open("/Users/david_zhang/dz_home/work/data_sci/autogroceries/credentials.txt") as file:
         credentials = file.readlines()
-    with open("/Users/david_zhang/Downloads/shopping_list_dz.txt") as file:
+    with open("/Users/david_zhang/Downloads/shopping_list_dz_cjkg.txt") as file:
         shopping_list = file.readlines()
 
-    shopping_list = [j[:-3] for i, j in enumerate(shopping_list) if 2 > i > 0]
-
-    sb = SainsburyShopper(["tomato", "lemon"], [2, 3])
+    ingredients = [j[:-3] for i, j in enumerate(shopping_list) if i > 0]
+    number = [int(j.split("\t")[1][:-1]) for i, j in enumerate(shopping_list) if i > 0]
+    print(len(number))
+    print(len(ingredients))
+    sb = SainsburyShopper(["not_a_ingredient", "tomato"], [1, 2])
     x = sb.shop(credentials[0], credentials[1])
     print(x)
 
