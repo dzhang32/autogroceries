@@ -80,9 +80,12 @@ class Shopper:
                  " (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36"
             opts.add_argument(f"user-agent={ua}")
             driver = self.webdriver.Chrome(self.webdriver_manager.install(),
-                                           options = opts)
+                                           options=opts)
         else:
-            driver = self.webdriver.Chrome(self.webdriver_manager.install())
+            opts = self.webdriver.ChromeOptions()
+            opts.add_argument("--disable-notifications")
+            driver = self.webdriver.Chrome(self.webdriver_manager.install(),
+                                           options=opts)
 
         self._driver = driver
 

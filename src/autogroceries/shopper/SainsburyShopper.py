@@ -20,12 +20,14 @@ class SainsburyShopper(Shopper):
         self._to_login()
         self._login(username, password)
         added = self._add_items_to_cart()
+
         return added
 
     def _add_items_to_cart(self):
         added = list()
         for n, item in zip(self.n_items, self.items):
             self._search_item(item)
+            self._check_popup()
             item_options = self._find_item_elements()
             if item_options is None:
                 added.append("Not found")
@@ -77,7 +79,7 @@ class SainsburyShopper(Shopper):
 
         # two-step auth via email... need to think about how best
         # to get around this - some potential for automation
-        # currently wait for 2 mins and enter manually
+        # currently must enter manually
         try:
             wait = WebDriverWait(self.driver, 5)
             cont = wait.until(EC.element_to_be_clickable(
@@ -97,17 +99,33 @@ class SainsburyShopper(Shopper):
         search.click()
         time.sleep(2)
 
+    def _check_popup(self):
+        try:
+            popup = self.driver.find_element_by_xpath(
+                "//a[@id='smg-etr-invitation-no']"
+            )
+            popup.click()
+        except NoSuchElementException:
+            pass
+
     def _find_item_elements(self):
+        try:
+            # look for the Category button, only appears once search has loaded
+            wait = WebDriverWait(self.driver, 3)
+            wait.until(EC.element_to_be_clickable(
+                (By.XPATH,
+                 "//div[@class='product-filter__row--items skipto-content__focus']"))
+            )
+        except TimeoutException:
+            return None
+
+        print("found!")
         item_options = self.driver.find_elements_by_xpath(
                 "//div[@class='ln-c-card pt']"
         )
 
-        # if no elements found return None
-        if len(item_options) == 0:
-            item_options = None
-
         # for now, select the first 5 options - TODO make this user selected
-        elif len(item_options) > 5:
+        if len(item_options) > 5:
             item_options = [e for i, e in enumerate(item_options) if i < 5]
 
         return item_options
@@ -142,11 +160,10 @@ class SainsburyShopper(Shopper):
             ".//button[@data-test-id='add-button']"
         )
         add.click()
-        time.sleep(2)
+        time.sleep(1)
 
         if n > 1:
             for i in range(n - 1):
-
                 add_more = selected_item.find_element_by_xpath(
                     ".//button[@data-test-id='pt-button-inc']"
                 )
@@ -180,10 +197,7 @@ if __name__ == "__main__":
 
     ingredients = [j[:-3] for i, j in enumerate(shopping_list) if i > 0]
     number = [int(j.split("\t")[1][:-1]) for i, j in enumerate(shopping_list) if i > 0]
-    print(len(number))
-    print(len(ingredients))
-    sb = SainsburyShopper(["not_a_ingredient", "tomato"], [1, 2])
+    sb = SainsburyShopper(ingredients, number)
     x = sb.shop(credentials[0], credentials[1])
     print(x)
-
 
