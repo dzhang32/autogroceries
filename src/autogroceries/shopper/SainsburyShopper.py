@@ -53,7 +53,10 @@ class SainsburyShopper(Shopper):
         accept_box = wait.until(EC.element_to_be_clickable(
             (By.XPATH, "//button[text()='Accept All Cookies']"))
         )
-        accept_box.click()
+
+        # https://sqa.stackexchange.com/questions/40678/using-python-selenium-not-able-to-perform-click-operation
+        # required otherwise obtain ElementClickInterceptedException
+        self.driver.execute_script("arguments[0].click();", accept_box)
 
     def _to_login(self):
         login = self.driver.find_element_by_xpath("//span[text()='Log in']")
