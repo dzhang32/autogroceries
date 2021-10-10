@@ -11,12 +11,53 @@ import csv
 
 class SainsburyShopper(Shopper):
 
+    """Automates grocery shopping from Sainsbury website
+
+    A SainsburyShopper object contains methods to open, login and add items to
+    cart from the Sainsbury website. Running the .shop() method will open and
+    automatically add the user-inputted items into your Sainsburys cart.
+
+    Parameters
+    ----------
+    items : list
+        List of items to search for and order.
+    n_items : list, default None
+        List of equal length to items, determining the number of each item to
+        order. If left as None, will assume user wants 1 of each item.
+
+    Examples
+    --------
+    >>> sainsbury = SainsburyShopper(['tomato', 'lemon'], [1, 2])
+    >>> sainsbury.shop("UN", "PW")
+    """
+
     def __init__(self, items, n_items=None):
         sainsbury_url = "https://www.sainsburys.co.uk"
 
         super().__init__(sainsbury_url, items, n_items)
 
     def shop(self, username, password, save=None):
+        """Automatically add items to cart from Sainsbury website
+
+        Uses Selenium to fill your Sainsbury cart with the desired items.
+
+        Parameters
+        ----------
+        username : str
+            Username for Sainsbury grocery account.
+        password : str
+            Password for Sainsbury grocery account.
+        save : str, default None
+            If entered, must be a path to save the names of the items searched
+            and added to cart as a csv.
+
+        Returns
+        -------
+        dict
+            Keys as the names of the items searched and values as the names of
+            the items added to cart.
+        """
+
         self._open_sainsbury()
         self._to_login()
         self._login(username, password)
