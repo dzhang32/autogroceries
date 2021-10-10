@@ -18,6 +18,7 @@ jupyter = "^1.0.0"
 myst-nb = "^0.13.0"
 sphinx-autoapi = "^1.8.4"
 sphinx-rtd-theme = "^1.0.0"
+Sphinx = "^4.2.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
