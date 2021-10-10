@@ -82,10 +82,7 @@ class Shopper:
             driver = self.webdriver.Chrome(self.webdriver_manager.install(),
                                            options=opts)
         else:
-            opts = self.webdriver.ChromeOptions()
-            opts.add_argument("--disable-notifications")
-            driver = self.webdriver.Chrome(self.webdriver_manager.install(),
-                                           options=opts)
+            driver = self.webdriver.Chrome(self.webdriver_manager.install())
 
         self._driver = driver
 

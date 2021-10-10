@@ -1,4 +1,5 @@
 from autogroceries.shopper import Shopper
+from autogroceries.utils import pause
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
@@ -47,6 +48,7 @@ class SainsburyShopper(Shopper):
         # wait a second for page to load
         self._accept_cookies()
 
+    @pause
     def _accept_cookies(self):
         # wait for few seconds for the cookies box to become clickable
         wait = WebDriverWait(self.driver, 3)
@@ -58,6 +60,7 @@ class SainsburyShopper(Shopper):
         # required otherwise obtain ElementClickInterceptedException
         self.driver.execute_script("arguments[0].click();", accept_box)
 
+    @pause
     def _to_login(self):
         login = self.driver.find_element_by_xpath("//span[text()='Log in']")
         login.click()
@@ -66,6 +69,7 @@ class SainsburyShopper(Shopper):
         )
         groceries.click()
 
+    @pause
     def _login(self, username, password):
         self._accept_cookies()
 
@@ -82,7 +86,7 @@ class SainsburyShopper(Shopper):
         # to get around this - some potential for automation
         # currently must enter manually
         try:
-            wait = WebDriverWait(self.driver, 2)
+            wait = WebDriverWait(self.driver, 3)
             cont = wait.until(EC.element_to_be_clickable(
                 (By.XPATH, "//button[text()='Continue']"))
             )
@@ -90,6 +94,7 @@ class SainsburyShopper(Shopper):
         except (NoSuchElementException, TimeoutException):
             pass
 
+    @pause
     def _search_item(self, item):
         print("Searching for " + item)
         search = self.driver.find_element_by_id("search-bar-input")
@@ -153,6 +158,7 @@ class SainsburyShopper(Shopper):
 
         return selected_item
 
+    @pause
     def _add_item(self, selected_item, n):
         try:
             # add button is not found if the item has been already added
@@ -186,6 +192,7 @@ class SainsburyShopper(Shopper):
 
         return item_name
 
+    @pause
     def _clear_search(self, item):
         search = self.driver.find_element_by_id("search-bar-input")
 
