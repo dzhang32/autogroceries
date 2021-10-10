@@ -213,6 +213,7 @@ class SainsburyShopper(Shopper):
 
         return searched_added
 
+
 if __name__ == "__main__":
 
     with open("/Users/david_zhang/dz_home/work/data_sci/autogroceries/credentials.txt") as file:
