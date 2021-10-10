@@ -67,6 +67,19 @@ class SainsburyShopper(Shopper):
         return searched_added
 
     def _add_items_to_cart(self):
+        """Wrapper function that adds items to the cart
+
+        Loops across the items, searches their name and adds corresponding
+        results to Sainsbury cart. A 'Not found' str is used to mark items that
+        were not found in the Sainsbury store.
+
+        Returns
+        -------
+        list
+            The names of the Sainsbury products that were added to the cart,
+            corresponding to each searched item.
+        """
+
         added = list()
         for n, item in zip(self.n_items, self.items):
             self._search_item(item)
@@ -85,6 +98,12 @@ class SainsburyShopper(Shopper):
         return added
 
     def _open_sainsbury(self):
+        """Opens a Selenium webdriver and go to the Sainsbury website
+
+        This method initialises the self.driver attribute, required for many of
+        the methods.
+        """
+
         self._open_driver()
         self._open_url()
 
@@ -93,7 +112,12 @@ class SainsburyShopper(Shopper):
 
     @pause
     def _accept_cookies(self):
-        # wait for few seconds for the cookies box to become clickable
+        """Click accept all cookies
+
+        Accepts cookies on the Sainsbury website, to avoid cookies popup masking
+        other required elements on the page (e.g. the search bar).
+        """
+
         wait = WebDriverWait(self.driver, 3)
         accept_box = wait.until(EC.element_to_be_clickable(
             (By.XPATH, "//button[text()='Accept All Cookies']"))
@@ -105,6 +129,8 @@ class SainsburyShopper(Shopper):
 
     @pause
     def _to_login(self):
+        """Navigate to the Sainsbury grocery account login page"""
+
         login = self.driver.find_element_by_xpath("//span[text()='Log in']")
         login.click()
         groceries = self.driver.find_element_by_xpath(
@@ -114,6 +140,23 @@ class SainsburyShopper(Shopper):
 
     @pause
     def _login(self, username, password):
+        """Login to the Sainsbury website
+
+        Sainsbury does have a two-factor authentication system in place.
+        When logging in for the first time in a while, users are required to
+        enter a emailed code to verify their identify. This can cause issues
+        with the login method, and currently the only solution is to first login
+        and complete the two-factor authentication manually before running
+        SainsburyShopper.
+
+        Parameters
+        ----------
+        username : str
+            Username for Sainsbury grocery account.
+        password : str
+            Password for Sainsbury grocery account.
+        """
+
         self._accept_cookies()
 
         # enter UN and PW
@@ -139,6 +182,14 @@ class SainsburyShopper(Shopper):
 
     @pause
     def _search_item(self, item):
+        """Search for an item
+
+        Parameters
+        ----------
+        item : str
+            Name of the current item to be searched.
+        """
+
         print("Searching for " + item)
         search = self.driver.find_element_by_id("search-bar-input")
         search.send_keys(item)
@@ -148,6 +199,13 @@ class SainsburyShopper(Shopper):
         search.click()
 
     def _check_popup(self):
+        """Click no on a Sainsbury popup
+
+        Sainsbury has a popup, that offers users a chance to enter a competition
+        by filling a survey. This overlays the site and obscures some of the
+        necessary elements. This method clicks the 'no' option on the popup.
+        """
+
         try:
             popup = self.driver.find_element_by_xpath(
                 "//a[@id='smg-etr-invitation-no']"
@@ -157,6 +215,14 @@ class SainsburyShopper(Shopper):
             pass
 
     def _find_item_elements(self):
+        """Obtain search results
+
+        Obtains the elements that correspond to the Sainsbury products related
+        to the current searched item. As of now, this limits the results to the
+        first 5 products, however there is scope to make this user-defined in
+        future if needed.
+        """
+
         try:
             # look for the 'Category' button panel
             # only appears once search has loaded
@@ -181,6 +247,24 @@ class SainsburyShopper(Shopper):
 
     @staticmethod
     def _select_item(item_options):
+        """Select the item to add to cart
+
+        If there is more than 1 search result, this function will 1. try to find
+        products that are favourites or 2. if no favourites are found, will
+        select the first product arbitrarily.
+
+        Parameters
+        ----------
+        item_options : list
+            Contains elements corresponding to the Sainsbury products resulting
+            from searching an item.
+
+        Returns
+        -------
+        selenium.WebElement
+            The element corresponding to the chosen item to be added to cart.
+        """
+
         # if we only have 1 option, no need to search for favourites
         if len(item_options) == 1:
             return item_options[0]
@@ -203,6 +287,17 @@ class SainsburyShopper(Shopper):
 
     @pause
     def _add_item(self, selected_item, n):
+        """Add the selected item to the Sainsbury cart
+
+        Parameters
+        ----------
+        selected_item : selenium.WebElement
+            The web element corresponding to the selected item to be added to
+            cart
+        n : int
+            The number of current item that should be added.
+        """
+
         try:
             # add button is not found if the item has been already added
             # this try/except allows us to add items already present in basket
@@ -227,6 +322,20 @@ class SainsburyShopper(Shopper):
 
     @staticmethod
     def _get_item_details(selected_item):
+        """Obtain the name of the selected item
+
+        Parameters
+        ----------
+        selected_item : selenium.WebElement
+            The web element corresponding to the selected item to be added to
+            cart
+
+        Returns
+        -------
+        str
+            Name of the Sainsbury product that has been added to cart.
+        """
+
         # needs to look in the current node, hence prefix with "." in ".//"
         item_info = selected_item.find_element_by_xpath(
             ".//a[@class='pt__link']"
@@ -237,6 +346,15 @@ class SainsburyShopper(Shopper):
 
     @pause
     def _clear_search(self, item):
+        """Clear the search bar
+
+        Parameters
+        ----------
+        item : str
+            Name of the searched item, the length of which will determine the
+            number of backspaces to send to the search box.
+        """
+
         search = self.driver.find_element_by_id("search-bar-input")
 
         # https://stackoverflow.com/questions/7732125/clear-text-from-textarea-with-selenium
@@ -245,6 +363,28 @@ class SainsburyShopper(Shopper):
             search.send_keys(Keys.BACK_SPACE)
 
     def _get_searched_added(self, added, save):
+        """Obtain and possibly save a dictionary of the searched and added items
+
+        Creates a dictionary, with keys as the searched items and the values as
+        the carted products. Then saves this as a csv, if the user has inputted
+        a path.
+
+        Parameters
+        ----------
+        added : list
+            The names of the Sainsbury products that have been added to the
+            cart, corresponding to each searched item.
+        save : None or str
+            If a str, should be the path to save the searched/added items as
+            a csv. If None, nothing will be saved
+
+        Returns
+        -------
+        dict
+            Keys as the searched items and the values as
+            the carted products.
+        """
+
         searched_added = {key: value for key, value in zip(self.items, added)}
 
         if save is not None:
