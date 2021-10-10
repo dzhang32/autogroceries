@@ -20,8 +20,9 @@ class SainsburyShopper(Shopper):
         self._to_login()
         self._login(username, password)
         added = self._add_items_to_cart()
+        searched_added = self._get_searched_added(added)
 
-        return added
+        return searched_added
 
     def _add_items_to_cart(self):
         added = list()
@@ -201,6 +202,11 @@ class SainsburyShopper(Shopper):
         for i in range(len(item)):
             search.send_keys(Keys.BACK_SPACE)
 
+    def _get_searched_added(self, added):
+        searched_added = {key: value for key, value in zip(self.items, added)}
+
+        return searched_added
+
 
 if __name__ == "__main__":
 
@@ -209,8 +215,8 @@ if __name__ == "__main__":
     with open("/Users/david_zhang/Downloads/shopping_list_dz_cjkg.txt") as file:
         shopping_list = file.readlines()
 
-    ingredients = [j[:-3] for i, j in enumerate(shopping_list) if i > 0]
-    number = [int(j.split("\t")[1][:-1]) for i, j in enumerate(shopping_list) if i > 0]
+    ingredients = [j[:-3] for i, j in enumerate(shopping_list) if 5> i > 0]
+    number = [int(j.split("\t")[1][:-1]) for i, j in enumerate(shopping_list) if 5 > i > 0]
     sb = SainsburyShopper(ingredients, number)
     x = sb.shop(credentials[0], credentials[1])
     print(x)
