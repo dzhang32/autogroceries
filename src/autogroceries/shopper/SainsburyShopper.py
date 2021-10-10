@@ -6,6 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import TimeoutException
+import csv
 
 
 class SainsburyShopper(Shopper):
@@ -15,12 +16,12 @@ class SainsburyShopper(Shopper):
 
         super().__init__(sainsbury_url, items, n_items)
 
-    def shop(self, username, password):
+    def shop(self, username, password, save=None):
         self._open_sainsbury()
         self._to_login()
         self._login(username, password)
         added = self._add_items_to_cart()
-        searched_added = self._get_searched_added(added)
+        searched_added = self._get_searched_added(added, save)
 
         return searched_added
 
@@ -202,11 +203,15 @@ class SainsburyShopper(Shopper):
         for i in range(len(item)):
             search.send_keys(Keys.BACK_SPACE)
 
-    def _get_searched_added(self, added):
+    def _get_searched_added(self, added, save):
         searched_added = {key: value for key, value in zip(self.items, added)}
 
-        return searched_added
+        if save is not None:
+            with open(save, "w") as f:
+                w = csv.writer(f)
+                w.writerows(searched_added.items())
 
+        return searched_added
 
 if __name__ == "__main__":
 
@@ -215,9 +220,9 @@ if __name__ == "__main__":
     with open("/Users/david_zhang/Downloads/shopping_list_dz_cjkg.txt") as file:
         shopping_list = file.readlines()
 
-    ingredients = [j[:-3] for i, j in enumerate(shopping_list) if 5> i > 0]
-    number = [int(j.split("\t")[1][:-1]) for i, j in enumerate(shopping_list) if 5 > i > 0]
+    ingredients = [j[:-3] for i, j in enumerate(shopping_list) if 3 > i > 0]
+    number = [int(j.split("\t")[1][:-1]) for i, j in enumerate(shopping_list) if 3 > i > 0]
     sb = SainsburyShopper(ingredients, number)
-    x = sb.shop(credentials[0], credentials[1])
+    x = sb.shop(credentials[0], credentials[1], save="/Users/david_zhang/Downloads/shopping_list_added.txt")
     print(x)
 
