@@ -18,10 +18,10 @@ class SainsburysShopper(Shopper):
     Parameters
     ----------
     items : list
-        List of items to search for and order.
+        List of items to search for and add to cart.
     n_items : list, default None
         List of equal length to items, determining the number of each item to
-        order. If left as None, will assume user wants 1 of each item.
+        order. If left as None, will assume user desires 1 of each item.
 
     Examples
     --------
@@ -37,8 +37,8 @@ class SainsburysShopper(Shopper):
     def shop(self, username, password, file=None):
         """Automatically fill your Sainsbury's cart with selected items
 
-        Method to be called by a user, which will search the Sainsbury's
-        database and add matching
+        Search the Sainsbury's grocery products for each item in turn, then add
+        the products found to the user's cart.
 
 
         Parameters
@@ -47,15 +47,15 @@ class SainsburysShopper(Shopper):
             Username for Sainsbury's grocery account.
         password : str
             Password for Sainsbury's grocery account.
-        file : str, default None
+        file : None or str, default None
             If entered, must be a path to save the names of the items searched
-            and added to cart as a csv.
+            and products added to the cart as a csv.
 
         Returns
         -------
         dict
             Keys as the names of the items searched and values as the names of
-            the items added to cart.
+            the products added to cart.
         """
 
         self._open_sainsburys()
@@ -67,11 +67,12 @@ class SainsburysShopper(Shopper):
         return items_products
 
     def _add_products_to_cart(self):
-        """Wrapper function that adds items to the cart
+        """Add products to the cart
 
         Loops across the items, searches their name and adds corresponding
-        results to Sainsbury's cart. A 'Not found' str is used to mark items that
-        were not found in the Sainsbury's store.
+        product results to user's Sainsbury's cart. A 'Not found' str is used to
+        mark items that did not have corresponding product found in the
+        Sainsbury's store.
 
         Returns
         -------
@@ -98,10 +99,10 @@ class SainsburysShopper(Shopper):
         return added_products
 
     def _open_sainsburys(self):
-        """Opens a Selenium webdriver and go to the Sainsbury's website
+        """Opens a Selenium webdriver and navigate to the Sainsbury's website
 
-        This method initialises the self.driver attribute, required for many of
-        the methods.
+        Initialises the self.driver attribute, required for all of the remaining
+        SainsburysShopper methods.
         """
 
         self._open_driver()
@@ -114,8 +115,8 @@ class SainsburysShopper(Shopper):
     def _accept_cookies(self):
         """Click accept all cookies
 
-        Accepts cookies on the Sainsbury's website, to avoid cookies popup masking
-        other required elements on the page (e.g. the search bar).
+        Accepts cookies on the Sainsbury's website, to avoid cookies popup
+        masking other required elements on the page (e.g. the search bar).
         """
 
         wait = WebDriverWait(self.driver, 3)
@@ -144,10 +145,10 @@ class SainsburysShopper(Shopper):
 
         Sainsbury's does have a two-factor authentication system in place.
         When logging in for the first time in a while, users are required to
-        enter a emailed code to verify their identify. This can cause issues
-        with the login method, and currently the only solution is to first login
-        and complete the two-factor authentication manually before running
-        SainsburysShopper.
+        enter a code (obtained via email) to verify their identify. This can
+        cause issues with the _login method. Currently, the only solution is to
+        first login and complete the two-factor authentication manually before
+        running .shop().
 
         Parameters
         ----------
@@ -199,11 +200,12 @@ class SainsburysShopper(Shopper):
         search.click()
 
     def _check_popup(self):
-        """Click no on a Sainsbury's popup
+        """Click no Sainsbury's popup
 
-        Sainsbury's has a popup, that offers users a chance to enter a competition
-        by filling a survey. This overlays the site and obscures some of the
-        necessary elements. This method clicks the 'no' option on the popup.
+        The Sainsbury's website periodically has a popup that offers users a
+        chance to enter a competition by filling a survey. This overlays the
+        site and obscures some of the elements required by SainsburysShopper.
+        This method clicks the 'no' option on the popup.
         """
 
         try:
@@ -215,12 +217,12 @@ class SainsburysShopper(Shopper):
             pass
 
     def _get_products(self):
-        """Obtain search results
+        """Obtain products that result from searching an item
 
-        Obtains the elements that correspond to the Sainsbury's products related
-        to the current searched item. As of now, this limits the results to the
-        first 5 products, however there is scope to make this user-defined in
-        future if needed.
+        Obtains the webelements that correspond to the Sainsbury's products
+        found for the current searched item. As of now, this limits the number
+        of products to the first 5, however there is scope to make this
+        user-defined in future if needed.
         """
 
         try:
@@ -247,22 +249,22 @@ class SainsburysShopper(Shopper):
 
     @staticmethod
     def _select_item(products):
-        """Select the item to add to cart
+        """Select the product to add to cart
 
-        If there is more than 1 search result, this function will 1. try to find
-        products that are favourites or 2. if no favourites are found, will
-        select the first product arbitrarily.
+        If there is more than 1 product found via the search, this function will
+        select one to add to cart, by either picking a favourites or selecting
+        the first product arbitrarily if no favourites are found.
 
         Parameters
         ----------
         products : list
-            Contains elements corresponding to the Sainsbury's products
-            resulting from searching an item.
+            Contains webelements corresponding to the Sainsbury's products
+            resulting from searching the current item.
 
         Returns
         -------
-        selenium.WebElement
-            The element corresponding to the chosen item to be added to cart.
+        selenium.webdriver.remote.webelement.WebElement
+            The webelement corresponding to the chosen item to be added to cart.
         """
 
         # if we only have 1 option, no need to search for favourites
@@ -293,8 +295,8 @@ class SainsburysShopper(Shopper):
 
         Parameters
         ----------
-        selected_product : selenium.WebElement
-            The web element corresponding to the selected product to be added to
+        selected_product : selenium.webdriver.remote.webelement.WebElement
+            The webelement corresponding to the selected product to be added to
             cart
         n : int
             The number of current item that should be added.
