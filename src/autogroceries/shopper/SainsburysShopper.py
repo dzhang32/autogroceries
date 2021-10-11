@@ -327,13 +327,13 @@ class SainsburysShopper(Shopper):
 
     @staticmethod
     def _get_product_name(selected_product):
-        """Obtain the name of the selected item
+        """Obtain the name of the selected product
 
         Parameters
         ----------
         selected_product : selenium.WebElement
             The web element corresponding to the selected item to be added to
-            cart
+            cart.
 
         Returns
         -------
@@ -368,11 +368,11 @@ class SainsburysShopper(Shopper):
             search.send_keys(Keys.BACK_SPACE)
 
     def _get_items_products(self, added_products, file):
-        """Obtain and possibly save a dictionary of the searched and added items
+        """Tidy (and save) the searched items and added products
 
         Creates a dictionary, with keys as the searched items and the values as
-        the carted products. Then saves this as a csv, if the user has inputted
-        a path.
+        the carted products. Then possibly save this as a csv, if the user has
+        inputted a file path.
 
         Parameters
         ----------
@@ -380,14 +380,13 @@ class SainsburysShopper(Shopper):
             The names of the Sainsbury's products that have been added to the
             cart, corresponding to each searched item.
         file : None or str
-            If a str, should be the path to save the searched/added items as
-            a csv. If None, nothing will be saved
+            If a str, should be the path to save the searched items/added
+            products as a csv.
 
         Returns
         -------
         dict
-            Keys as the searched items and the values as
-            the carted products.
+            Keys as the searched items and the values as the carted products.
         """
 
         items_products = {k: v for k, v in zip(self.items, added_products)}
