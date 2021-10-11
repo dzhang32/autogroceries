@@ -10,7 +10,6 @@ import csv
 
 
 class SainsburyShopper(Shopper):
-
     """Automates grocery shopping from Sainsbury website
 
     A SainsburyShopper object contains methods to open, login and add items to
@@ -36,7 +35,7 @@ class SainsburyShopper(Shopper):
 
         super().__init__(sainsbury_url, items, n_items)
 
-    def shop(self, username, password, save=None):
+    def shop(self, username, password, file=None):
         """Automatically add items to cart from Sainsbury website
 
         Uses Selenium to fill your Sainsbury cart with the desired items.
@@ -47,7 +46,7 @@ class SainsburyShopper(Shopper):
             Username for Sainsbury grocery account.
         password : str
             Password for Sainsbury grocery account.
-        save : str, default None
+        file : str, default None
             If entered, must be a path to save the names of the items searched
             and added to cart as a csv.
 
@@ -61,12 +60,12 @@ class SainsburyShopper(Shopper):
         self._open_sainsbury()
         self._to_login()
         self._login(username, password)
-        added = self._add_items_to_cart()
-        searched_added = self._get_searched_added(added, save)
+        added_products = self._add_products_to_cart()
+        items_products = self._get_items_products(added_products, file)
 
-        return searched_added
+        return items_products
 
-    def _add_items_to_cart(self):
+    def _add_products_to_cart(self):
         """Wrapper function that adds items to the cart
 
         Loops across the items, searches their name and adds corresponding
@@ -80,22 +79,22 @@ class SainsburyShopper(Shopper):
             corresponding to each searched item.
         """
 
-        added = list()
+        added_products = list()
         for n, item in zip(self.n_items, self.items):
             self._search_item(item)
             self._check_popup()
-            item_options = self._find_item_elements()
-            if item_options is None:
-                added.append("Not found")
+            products = self._get_products()
+            if products is None:
+                added_products.append("Not found")
             else:
-                selected_item = self._select_item(item_options)
-                item_info = self._get_item_details(selected_item)
-                added.append(item_info)
-                self._add_item(selected_item, n)
+                selected_product = self._select_item(products)
+                product_name = self._get_product_name(selected_product)
+                added_products.append(product_name)
+                self._add_product(selected_product, n)
 
             self._clear_search(item)
 
-        return added
+        return added_products
 
     def _open_sainsbury(self):
         """Opens a Selenium webdriver and go to the Sainsbury website
@@ -214,7 +213,7 @@ class SainsburyShopper(Shopper):
         except NoSuchElementException:
             pass
 
-    def _find_item_elements(self):
+    def _get_products(self):
         """Obtain search results
 
         Obtains the elements that correspond to the Sainsbury products related
@@ -235,18 +234,18 @@ class SainsburyShopper(Shopper):
         except TimeoutException:
             return None
 
-        item_options = self.driver.find_elements_by_xpath(
+        products = self.driver.find_elements_by_xpath(
                 "//div[@class='ln-c-card pt']"
         )
 
         # for now, select the first 5 options - TODO make this user selected
-        if len(item_options) > 5:
-            item_options = [e for i, e in enumerate(item_options) if i < 5]
+        if len(products) > 5:
+            products = [e for i, e in enumerate(products) if i < 5]
 
-        return item_options
+        return products
 
     @staticmethod
-    def _select_item(item_options):
+    def _select_item(products):
         """Select the item to add to cart
 
         If there is more than 1 search result, this function will 1. try to find
@@ -266,27 +265,29 @@ class SainsburyShopper(Shopper):
         """
 
         # if we only have 1 option, no need to search for favourites
-        if len(item_options) == 1:
-            return item_options[0]
+        if len(products) == 1:
+            return products[0]
 
         # by default let's select the first item available
-        selected_item = item_options[0]
+        selected_product = products[0]
 
         # then, let's look for a favourite item
-        for item in item_options:
+        for product in products:
             try:
                 # .// needed here, the . refers to ONLY search the current node
                 # https://github.com/seleniumhq/selenium-google-code-issue-archive/issues/5819
-                item.find_element_by_xpath(".//button[@class='pt__icons__fav']")
-                selected_item = item
+                product.find_element_by_xpath(
+                    ".//button[@class='pt__icons__fav']"
+                )
+                selected_product = product
                 break
             except NoSuchElementException:
                 continue
 
-        return selected_item
+        return selected_product
 
     @pause
-    def _add_item(self, selected_item, n):
+    def _add_product(self, selected_product, n):
         """Add the selected item to the Sainsbury cart
 
         Parameters
@@ -301,7 +302,7 @@ class SainsburyShopper(Shopper):
         try:
             # add button is not found if the item has been already added
             # this try/except allows us to add items already present in basket
-            add = selected_item.find_element_by_xpath(
+            add = selected_product.find_element_by_xpath(
                 ".//button[@data-test-id='add-button']"
             )
             add.click()
@@ -310,7 +311,8 @@ class SainsburyShopper(Shopper):
         except NoSuchElementException:
             pass
 
-        # if we still need to add more, click increment for n times
+        # if we still need to add more, click increment n times
+        # TODO - change this to searching within selected_product
         if n > 0:
             wait = WebDriverWait(self.driver, 3)
             add_more = wait.until(EC.element_to_be_clickable(
@@ -321,7 +323,7 @@ class SainsburyShopper(Shopper):
                 add_more.click()
 
     @staticmethod
-    def _get_item_details(selected_item):
+    def _get_product_name(selected_product):
         """Obtain the name of the selected item
 
         Parameters
@@ -337,12 +339,12 @@ class SainsburyShopper(Shopper):
         """
 
         # needs to look in the current node, hence prefix with "." in ".//"
-        item_info = selected_item.find_element_by_xpath(
+        product_info = selected_product.find_element_by_xpath(
             ".//a[@class='pt__link']"
         )
-        item_name = item_info.get_attribute("innerHTML")
+        product_name = product_info.get_attribute("innerHTML")
 
-        return item_name
+        return product_name
 
     @pause
     def _clear_search(self, item):
@@ -362,7 +364,7 @@ class SainsburyShopper(Shopper):
         for i in range(len(item)):
             search.send_keys(Keys.BACK_SPACE)
 
-    def _get_searched_added(self, added, save):
+    def _get_items_products(self, added_products, file):
         """Obtain and possibly save a dictionary of the searched and added items
 
         Creates a dictionary, with keys as the searched items and the values as
@@ -371,10 +373,10 @@ class SainsburyShopper(Shopper):
 
         Parameters
         ----------
-        added : list
+        added_products : list
             The names of the Sainsbury products that have been added to the
             cart, corresponding to each searched item.
-        save : None or str
+        file : None or str
             If a str, should be the path to save the searched/added items as
             a csv. If None, nothing will be saved
 
@@ -385,14 +387,14 @@ class SainsburyShopper(Shopper):
             the carted products.
         """
 
-        searched_added = {key: value for key, value in zip(self.items, added)}
+        items_products = {k: v for k, v in zip(self.items, added_products)}
 
-        if save is not None:
-            with open(save, "w") as f:
+        if file is not None:
+            with open(file, "w") as f:
                 w = csv.writer(f)
-                w.writerows(searched_added.items())
+                w.writerows(items_products.items())
 
-        return searched_added
+        return items_products
 
 
 if __name__ == "__main__":
@@ -405,6 +407,6 @@ if __name__ == "__main__":
     ingredients = [j[:-3] for i, j in enumerate(shopping_list) if 3 > i > 0]
     number = [int(j.split("\t")[1][:-1]) for i, j in enumerate(shopping_list) if 3 > i > 0]
     sb = SainsburyShopper(ingredients, number)
-    x = sb.shop(credentials[0], credentials[1], save="/Users/david_zhang/Downloads/shopping_list_added.txt")
+    x = sb.shop(credentials[0], credentials[1], file="/Users/david_zhang/Downloads/shopping_list_added.txt")
     print(x)
 
