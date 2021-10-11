@@ -300,7 +300,7 @@ class SainsburysShopper(Shopper):
             The number of current item that should be added.
         """
 
-        wait = WebDriverWait(selected_product, 3)
+        wait = WebDriverWait(selected_product, 2)
 
         try:
             # add button is not found if the item has been already added
@@ -311,11 +311,10 @@ class SainsburysShopper(Shopper):
             add.click()
             # take 1 away from n as we add 1
             n -= 1
-        except NoSuchElementException:
+        except TimeoutException:
             pass
 
         # if we still need to add more, click increment n times
-        # TODO - change this to searching within selected_product
         if n > 0:
             add_more = wait.until(EC.element_to_be_clickable(
                 (By.XPATH, ".//button[@data-test-id='pt-button-inc']"))
