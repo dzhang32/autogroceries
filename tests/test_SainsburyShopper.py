@@ -9,7 +9,3 @@ def test_default_sainsburys_shopper():
     assert sb.items == ["tomato", "lemon"]
     assert sb.n_items == [1, 2]
     assert sb.driver is None
-
-
-def test_default_sainsburys_shopper():
-    sb._open_sainsbury()
