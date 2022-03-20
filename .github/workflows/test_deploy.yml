@@ -18,10 +18,9 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        os: [ Ubuntu, MacOS ]
+        os: [ Ubuntu ]
         python:
           - 3.8
-          - 3.9
 
     steps:
       - uses: actions/checkout@v2
@@ -37,44 +36,11 @@ jobs:
         if: matrix.os == 'MacOS'
         run: brew install bzr
 
-      - name: Install dependencies
-        run: |
-          python3 -m pip install webdriver-manager
-          python3 -m pip install selenium
-          python3 -m pip install --index-url https://test.pypi.org/simple/ autogroceries
+      - name: Install poetry
+        uses: snok/install-poetry@v1
 
-      - name: Run unit testing
-        run: |
-          ls
-          python3 -m pip install pytest
-          python3 -m pytest
+      - name: Install package
+        run: poetry install
 
-  deploy-package:
-    # deploy-package only runs if tests pass
-    needs: test-package
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-
-      - name: Install dependencies
-        run: |
-          python3 -m pip install sphinx
-          python3 -m pip install sphinx-rtd-theme
-      - name: Create sphinx documentation
-        run: |
-          cd docs
-          sphinx-apidoc -f -o source/ ../codino
-          make html
-          # needs an empty .nojekyll, otherwise doesn't render properly
-          # https://stackoverflow.com/questions/62626125/github-pages-with-sphinx-generated-documentation-not-displaying-html-correctly
-          cd build/html
-          touch .nojekyll
-      - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@3.7.1
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH: gh-pages # The branch the action should deploy to.
-          FOLDER: docs/build/html # The folder the action should deploy.
-          CLEAN: true # Automatically remove deleted files from the deploy branch
+      - name: Run unit tests
+        run: poetry run pytest tests/ --cov=codino --cov-report=xml
