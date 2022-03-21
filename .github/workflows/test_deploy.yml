@@ -28,8 +28,7 @@ jobs:
           python-version: ${{ matrix.python }}
 
       - name: Setup selenium
-        # https://github.com/marketplace/actions/setup-chromedriver
-        uses: nanasess/setup-chromedriver@v1.0.5
+        run: sudo apt-get install -y chromium-browser
 
       - name: Install Ubuntu dependencies
         if: matrix.os == 'Ubuntu'
