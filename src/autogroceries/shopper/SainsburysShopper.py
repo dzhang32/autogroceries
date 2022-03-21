@@ -397,18 +397,3 @@ class SainsburysShopper(Shopper):
                 w.writerows(items_products.items())
 
         return items_products
-
-
-if __name__ == "__main__":
-
-    with open("/Users/david_zhang/dz_home/work/data_sci/autogroceries/credentials.txt") as file:
-        credentials = file.readlines()
-    with open("/Users/david_zhang/Downloads/shopping_list_dz_cjkg.txt") as file:
-        shopping_list = file.readlines()
-
-    ingredients = [j[:-3] for i, j in enumerate(shopping_list) if 3 > i > 0]
-    number = [int(j.split("\t")[1][:-1]) for i, j in enumerate(shopping_list) if 3 > i > 0]
-    sb = SainsburysShopper(ingredients, number)
-    x = sb.shop(credentials[0], credentials[1], file="/Users/david_zhang/Downloads/shopping_list_added.txt")
-    print(x)
-
