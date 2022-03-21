@@ -14,7 +14,6 @@ jobs:
 
     name: test / ${{ matrix.python }} / ${{ matrix.os }}
     runs-on: ${{ matrix.os }}-latest
-
     strategy:
       fail-fast: true
       matrix:
@@ -27,6 +26,10 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python }}
+
+      - name: Setup selenium
+        # https://github.com/marketplace/actions/setup-chromedriver
+        uses: nanasess/setup-chromedriver@v1.0.5
 
       - name: Install Ubuntu dependencies
         if: matrix.os == 'Ubuntu'
