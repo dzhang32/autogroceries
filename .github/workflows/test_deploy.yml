@@ -27,9 +27,6 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
 
-      - name: Setup selenium
-        run: sudo apt-get install -y chromium-browser
-
       - name: Install Ubuntu dependencies
         if: matrix.os == 'Ubuntu'
         run: sudo apt-get install bzr
