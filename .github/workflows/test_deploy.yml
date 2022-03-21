@@ -43,4 +43,4 @@ jobs:
         run: poetry install
 
       - name: Run unit tests
-        run: poetry run pytest tests/ --cov=codino --cov-report=xml
+        run: poetry run pytest tests/ --cov=autogroceries --cov-report=xml
