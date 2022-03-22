@@ -23,7 +23,7 @@ pip install autogroceries
 
 `autogroceries` uses [Selenium](https://selenium-python.readthedocs.io) to interface with the Sainsbury's website, automatically filling your cart with an inputted list of ingredients.
 
-The below illustrates the minimal config required to run `autogroceries`. For a more detailed tutorial please see the vignette.
+The below illustrates the minimal config required to run `autogroceries`.
 
 ```python
 from autogroceries.shopper import SainsburysShopper
