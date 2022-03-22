@@ -121,11 +121,14 @@ class Shopper:
 
             # need to set user-agent otherwise headless browser is blocked
             # https://intoli.com/blog/making-chrome-headless-undetectable/
-            ua = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36" + \
-                 " (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36"
+            ua = (
+                "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36"
+                + " (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36"
+            )
             opts.add_argument(f"user-agent={ua}")
-            driver = self.webdriver.Chrome(self.webdriver_manager.install(),
-                                           options=opts)
+            driver = self.webdriver.Chrome(
+                self.webdriver_manager.install(), options=opts
+            )
         else:
             driver = self.webdriver.Chrome(self.webdriver_manager.install())
 

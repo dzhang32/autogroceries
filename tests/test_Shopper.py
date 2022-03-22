@@ -53,12 +53,14 @@ def test_open_url_fails_when_driver_not_open():
     with pytest.raises(ValueError, match="driver has not yet been opened"):
         shopper._open_url()
 
+
 @pytest.mark.skipif(sys.platform == "linux", reason="skip selenium test on GHA")
 def test_open_url_fails_works_after_open_driver():
     # TODO - figure out how to test selenium on GHA
     shopper._open_driver()
     shopper._open_url()
     assert shopper.driver.title == "Sainsbury’s"
+
 
 @pytest.mark.skipif(sys.platform == "linux", reason="skip selenium test on GHA")
 def test_close_driver():

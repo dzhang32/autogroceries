@@ -6,6 +6,7 @@ from timeit import default_timer
 # decorator timer used to test pause()
 def timer(func):
     """Decorator that times the input function and returns the run time"""
+
     @functools.wraps(func)
     def wrapper_timer(*args, **kwargs):
         start_time = default_timer()
@@ -13,6 +14,7 @@ def timer(func):
         end_time = default_timer()
         run_time = end_time - start_time
         return run_time
+
     return wrapper_timer
 
 

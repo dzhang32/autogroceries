@@ -120,8 +120,10 @@ class SainsburysShopper(Shopper):
         """
 
         wait = WebDriverWait(self.driver, 3)
-        accept_box = wait.until(EC.element_to_be_clickable(
-            (By.XPATH, "//button[text()='Accept All Cookies']"))
+        accept_box = wait.until(
+            EC.element_to_be_clickable(
+                (By.XPATH, "//button[text()='Accept All Cookies']")
+            )
         )
 
         # https://sqa.stackexchange.com/questions/40678/using-python-selenium-not-able-to-perform-click-operation
@@ -134,9 +136,7 @@ class SainsburysShopper(Shopper):
 
         login = self.driver.find_element_by_xpath("//span[text()='Log in']")
         login.click()
-        groceries = self.driver.find_element_by_xpath(
-            "//a[text()='Groceries account']"
-        )
+        groceries = self.driver.find_element_by_xpath("//a[text()='Groceries account']")
         groceries.click()
 
     @pause
@@ -174,8 +174,8 @@ class SainsburysShopper(Shopper):
         # currently must enter manually
         try:
             wait = WebDriverWait(self.driver, 3)
-            cont = wait.until(EC.element_to_be_clickable(
-                (By.XPATH, "//button[text()='Continue']"))
+            cont = wait.until(
+                EC.element_to_be_clickable((By.XPATH, "//button[text()='Continue']"))
             )
             cont.click()
         except (NoSuchElementException, TimeoutException):
@@ -229,17 +229,19 @@ class SainsburysShopper(Shopper):
             # look for the 'Category' button panel
             # only appears once search has loaded
             wait = WebDriverWait(self.driver, 3)
-            wait.until(EC.element_to_be_clickable(
-                (By.XPATH,
-                 "//div[@class='product-filter__row--items " +
-                 "skipto-content__focus']"))
+            wait.until(
+                EC.element_to_be_clickable(
+                    (
+                        By.XPATH,
+                        "//div[@class='product-filter__row--items "
+                        + "skipto-content__focus']",
+                    )
+                )
             )
         except TimeoutException:
             return None
 
-        products = self.driver.find_elements_by_xpath(
-                "//div[@class='ln-c-card pt']"
-        )
+        products = self.driver.find_elements_by_xpath("//div[@class='ln-c-card pt']")
 
         # for now, select the first 5 options - TODO make this user selected
         if len(products) > 5:
@@ -279,9 +281,7 @@ class SainsburysShopper(Shopper):
             try:
                 # .// needed here, the . refers to ONLY search the current node
                 # https://github.com/seleniumhq/selenium-google-code-issue-archive/issues/5819
-                product.find_element_by_xpath(
-                    ".//button[@class='pt__icons__fav']"
-                )
+                product.find_element_by_xpath(".//button[@class='pt__icons__fav']")
                 selected_product = product
                 break
             except NoSuchElementException:
@@ -307,8 +307,10 @@ class SainsburysShopper(Shopper):
         try:
             # add button is not found if the item has been already added
             # this try/except allows us to add items already present in basket
-            add = wait.until(EC.element_to_be_clickable(
-                (By.XPATH, ".//button[@data-test-id='add-button']"))
+            add = wait.until(
+                EC.element_to_be_clickable(
+                    (By.XPATH, ".//button[@data-test-id='add-button']")
+                )
             )
             add.click()
             # take 1 away from n as we add 1
@@ -318,8 +320,10 @@ class SainsburysShopper(Shopper):
 
         # if we still need to add more, click increment n times
         if n > 0:
-            add_more = wait.until(EC.element_to_be_clickable(
-                (By.XPATH, ".//button[@data-test-id='pt-button-inc']"))
+            add_more = wait.until(
+                EC.element_to_be_clickable(
+                    (By.XPATH, ".//button[@data-test-id='pt-button-inc']")
+                )
             )
 
             for i in range(n):
@@ -342,9 +346,7 @@ class SainsburysShopper(Shopper):
         """
 
         # needs to look in the current node, hence prefix with "." in ".//"
-        product_info = selected_product.find_element_by_xpath(
-            ".//a[@class='pt__link']"
-        )
+        product_info = selected_product.find_element_by_xpath(".//a[@class='pt__link']")
         product_name = product_info.get_attribute("innerHTML")
 
         return product_name

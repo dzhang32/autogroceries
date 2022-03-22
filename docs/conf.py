@@ -6,9 +6,9 @@
 
 # -- Project information -----------------------------------------------------
 
-project = u"autogroceries"
-copyright = u"2021, David Zhang"
-author = u"David Zhang"
+project = "autogroceries"
+copyright = "2021, David Zhang"
+author = "David Zhang"
 
 # -- General configuration ---------------------------------------------------
 
