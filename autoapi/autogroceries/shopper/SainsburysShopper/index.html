@@ -18,6 +18,9 @@
         <script src="../../../../_static/jquery.js"></script>
         <script src="../../../../_static/underscore.js"></script>
         <script src="../../../../_static/doctools.js"></script>
+        <script>let toggleHintShow = 'Click to show';</script>
+        <script>let toggleHintHide = 'Click to hide';</script>
+        <script>let toggleOpenOnPrint = 'true';</script>
         <script src="../../../../_static/togglebutton.js"></script>
         <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -106,7 +109,7 @@
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="autogroceries.shopper.SainsburysShopper.SainsburysShopper">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">autogroceries.shopper.SainsburysShopper.</span></span><span class="sig-name descname"><span class="pre">SainsburysShopper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">items</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_items</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/autogroceries/shopper/SainsburysShopper.html#SainsburysShopper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autogroceries.shopper.SainsburysShopper.SainsburysShopper" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">autogroceries.shopper.SainsburysShopper.</span></span><span class="sig-name descname"><span class="pre">SainsburysShopper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">items</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_items</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/autogroceries/shopper/SainsburysShopper.html#SainsburysShopper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autogroceries.shopper.SainsburysShopper.SainsburysShopper" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="../index.html#autogroceries.shopper.Shopper" title="autogroceries.shopper.Shopper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autogroceries.shopper.Shopper</span></code></a></p>
 <p>Automates grocery shopping from the Sainsbury’s website</p>
 <p>A SainsburysShopper object contains methods to open, login to, search items
@@ -244,7 +247,7 @@ user-defined in future if needed.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="autogroceries.shopper.SainsburysShopper.SainsburysShopper._select_item">
-<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">_select_item</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">products</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/autogroceries/shopper/SainsburysShopper.html#SainsburysShopper._select_item"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autogroceries.shopper.SainsburysShopper.SainsburysShopper._select_item" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_select_item</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">products</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/autogroceries/shopper/SainsburysShopper.html#SainsburysShopper._select_item"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autogroceries.shopper.SainsburysShopper.SainsburysShopper._select_item" title="Permalink to this definition"></a></dt>
 <dd><p>Select the product to add to cart</p>
 <p>If there is more than 1 product found via the search, this function will
 select one to add to cart, by either picking a favourites or selecting
@@ -280,7 +283,7 @@ cart</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="autogroceries.shopper.SainsburysShopper.SainsburysShopper._get_product_name">
-<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">_get_product_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">selected_product</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/autogroceries/shopper/SainsburysShopper.html#SainsburysShopper._get_product_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autogroceries.shopper.SainsburysShopper.SainsburysShopper._get_product_name" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_get_product_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">selected_product</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/autogroceries/shopper/SainsburysShopper.html#SainsburysShopper._get_product_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autogroceries.shopper.SainsburysShopper.SainsburysShopper._get_product_name" title="Permalink to this definition"></a></dt>
 <dd><p>Obtain the name of the selected product</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
