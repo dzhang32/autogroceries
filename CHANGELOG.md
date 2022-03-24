@@ -2,6 +2,6 @@
 
 <!--next-version-placeholder-->
 
-## v0.1.0 (28/09/2021)
+## v1.0.0 (24/03/2022)
 
 - First release of `autogroceries`!
