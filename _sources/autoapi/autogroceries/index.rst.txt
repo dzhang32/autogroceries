@@ -1,0 +1,24 @@
+:py:mod:`autogroceries`
+=======================
+
+.. py:module:: autogroceries
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   shopper/index.rst
+   utils/index.rst
+
+
+Package Contents
+----------------
+
+.. py:data:: __version__
+   
+
+   
+

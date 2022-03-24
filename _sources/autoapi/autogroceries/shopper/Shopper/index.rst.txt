@@ -1,0 +1,120 @@
+:py:mod:`autogroceries.shopper.Shopper`
+=======================================
+
+.. py:module:: autogroceries.shopper.Shopper
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   autogroceries.shopper.Shopper.Shopper
+
+
+
+
+.. py:class:: Shopper(url, items, n_items=None, headless=False)
+
+   Automates grocery shopping from a user-inputted URL
+
+   A Shopper object contains methods to open a grocery website and also store
+   the details of the food items that are desired to be ordered. Shopper class
+   is not intended to be used to created instances, rather be a (virtual) class
+   for child Shopper classes to inherit utility methods and attributes from.
+
+   :param url: URL of the grocery store website to order from.
+   :type url: str
+   :param items: List of items to search for and order.
+   :type items: list
+   :param n_items: List of equal length to items, determining the number of each item to
+                   order.
+   :type n_items: list
+   :param headless: Whether to open the Selenium webdriver in headless mode, exists mostly
+                    for testing.
+   :type headless: bool
+
+   .. py:method:: close_driver(self)
+
+
+   .. py:method:: url(self)
+      :property:
+
+      Return the URL of Shopper
+
+
+   .. py:method:: headless(self)
+      :property:
+
+      Return the headless attribute of Shopper
+
+
+   .. py:method:: items(self)
+      :property:
+
+      Return the items attribute of Shopper
+
+
+   .. py:method:: n_items(self)
+      :property:
+
+      Return the n_items attribute of Shopper
+
+
+   .. py:method:: webdriver(self)
+      :property:
+
+      Return the webdriver attribute of Shopper
+
+
+   .. py:method:: webdriver_manager(self)
+      :property:
+
+      Return the webdriver_manager attribute of Shopper
+
+
+   .. py:method:: driver(self)
+      :property:
+
+      Return the driver attribute of Shopper
+
+
+   .. py:method:: _open_driver(self)
+
+      Open a driver using Selenium (in headless mode if preferred)
+
+      Currently can only use Chrome as the browser.
+
+
+   .. py:method:: _open_url(self)
+
+      Open the URL attribute in Shopper
+
+
+   .. py:method:: _check_driver_is_not_none(self)
+
+      Checks driver has been opened (before trying to open URL)
+
+
+   .. py:method:: _check_headless(headless)
+      :staticmethod:
+
+      Checks format of headless
+
+
+   .. py:method:: _check_items(items)
+      :staticmethod:
+
+      Check format of items
+
+
+   .. py:method:: _check_n_items(items, n_items)
+      :staticmethod:
+
+      Check format of n_items
+
+
+
