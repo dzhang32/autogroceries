@@ -7,7 +7,7 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 [![ci](https://github.com/dzhang32/autogroceries/workflows/test-deploy-package/badge.svg)](https://github.com/dzhang32/autogroceries/actions)
 [![Codecov test
 coverage](https://codecov.io/gh/dzhang32/autogroceries/branch/master/graph/badge.svg)](https://codecov.io/gh/dzhang32/autogroceries?branch=master)
-[![PyPI version](https://badge.fury.io/py/autogroceries.svg)](https://badge.fury.io/py/autogroceries)
+[![pypi version](https://pypip.in/version/autogroceries/badge.svg)](https://pypi.python.org/pypi/autogroceries/)
 <!-- badges: end -->
 
 The goal of `autogroceries` is to automate your weekly grocery shop (from Sainsbury's).
