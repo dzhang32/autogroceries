@@ -44,11 +44,6 @@ jobs:
       - name: Run unit tests
         run: poetry run pytest tests/ --cov=autogroceries --cov-report=xml
 
-      - name: Upload Coverage to Codecov
-        uses: codecov/codecov-action@v2
-        with:
-          file: ./coverage.xml
-
       - name: Build documentation
         run: poetry run make html --directory docs/
 

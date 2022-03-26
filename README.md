@@ -5,8 +5,6 @@
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![ci](https://github.com/dzhang32/autogroceries/workflows/test-deploy-package/badge.svg)](https://github.com/dzhang32/autogroceries/actions)
-[![Codecov test
-coverage](https://codecov.io/gh/dzhang32/autogroceries/branch/master/graph/badge.svg)](https://codecov.io/gh/dzhang32/autogroceries?branch=master)
 [![PyPI](https://img.shields.io/pypi/v/autogroceries.svg)](https://pypi.python.org/pypi)
 <!-- badges: end -->
 
