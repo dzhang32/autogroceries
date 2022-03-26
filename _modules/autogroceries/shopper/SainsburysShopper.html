@@ -82,7 +82,7 @@
 <span class="kn">from</span> <span class="nn">selenium.webdriver.support</span> <span class="kn">import</span> <span class="n">expected_conditions</span> <span class="k">as</span> <span class="n">EC</span>
 <span class="kn">from</span> <span class="nn">selenium.common.exceptions</span> <span class="kn">import</span> <span class="n">NoSuchElementException</span>
 <span class="kn">from</span> <span class="nn">selenium.common.exceptions</span> <span class="kn">import</span> <span class="n">TimeoutException</span>
-<span class="kn">import</span> <span class="nn">csv</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 
 <div class="viewcode-block" id="SainsburysShopper"><a class="viewcode-back" href="../../../autoapi/autogroceries/shopper/index.html#autogroceries.shopper.SainsburysShopper.SainsburysShopper">[docs]</a><span class="k">class</span> <span class="nc">SainsburysShopper</span><span class="p">(</span><span class="n">Shopper</span><span class="p">):</span>
@@ -467,12 +467,16 @@
 <span class="sd">            Keys as the searched items and the values as the carted products.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">items_products</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">,</span> <span class="n">added_products</span><span class="p">)}</span>
+        <span class="n">items_products</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;item&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">,</span>
+                <span class="s2">&quot;n_items&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_items</span><span class="p">,</span>
+                <span class="s2">&quot;added_product&quot;</span><span class="p">:</span> <span class="n">added_products</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-                <span class="n">w</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-                <span class="n">w</span><span class="o">.</span><span class="n">writerows</span><span class="p">(</span><span class="n">items_products</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+            <span class="n">items_products</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">items_products</span></div></div>
 </pre></div>
