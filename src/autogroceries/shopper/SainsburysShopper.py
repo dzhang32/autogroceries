@@ -6,7 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import TimeoutException
-import csv
+import pandas as pd
 
 
 class SainsburysShopper(Shopper):
@@ -391,11 +391,15 @@ class SainsburysShopper(Shopper):
             Keys as the searched items and the values as the carted products.
         """
 
-        items_products = {k: v for k, v in zip(self.items, added_products)}
+        items_products = pd.DataFrame(
+            {
+                "item": self.items,
+                "n_items": self.n_items,
+                "added_product": added_products,
+            }
+        )
 
         if file is not None:
-            with open(file, "w") as f:
-                w = csv.writer(f)
-                w.writerows(items_products.items())
+            items_products.to_csv(file)
 
         return items_products
