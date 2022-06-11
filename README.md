@@ -37,6 +37,8 @@ sb = SainsburysShopper(ingreds, n_ingreds)
 shopping_list = sb.shop("UN", "PW")
 ```
 
+https://user-images.githubusercontent.com/32676710/173201096-95633b21-d023-439d-9d18-8d00d0e33c4a.mp4
+
 ## Credits
 
 `autogroceries` was created with [`cookiecutter`](https://cookiecutter.readthedocs.io/en/latest/) and the `py-pkgs-cookiecutter` [template](https://github.com/py-pkgs/py-pkgs-cookiecutter).
