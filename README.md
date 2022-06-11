@@ -27,8 +27,8 @@ The below illustrates the minimal config required to run `autogroceries`.
 ```python
 from autogroceries.shopper import SainsburysShopper
 
-ingreds = ["tomatoes", "lemon"]
-n_ingreds = [1, 2]
+ingreds = ["cereal", "tomatoes", "lemon", "salad", "grapefruit"]
+n_ingreds = [1, 1, 2, 1, 3]
 sb = SainsburysShopper(ingreds, n_ingreds)
 
 # SainsburysShopper needs Sainsbury's grocery account username/email and password
