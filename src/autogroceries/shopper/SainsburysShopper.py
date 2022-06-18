@@ -241,7 +241,9 @@ class SainsburysShopper(Shopper):
         except TimeoutException:
             return None
 
-        products = self.driver.find_elements_by_xpath("//div[@class='ln-c-card pt']")
+        products = self.driver.find_elements_by_xpath(
+            "//div[@class='ln-c-card pt pt-card']"
+        )
 
         # for now, select the first 5 options - TODO make this user selected
         if len(products) > 5:
