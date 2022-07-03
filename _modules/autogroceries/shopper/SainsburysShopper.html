@@ -74,15 +74,15 @@
            <div itemprop="articleBody">
              
   <h1>Source code for autogroceries.shopper.SainsburysShopper</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">autogroceries.shopper</span> <span class="kn">import</span> <span class="n">Shopper</span>
-<span class="kn">from</span> <span class="nn">autogroceries.utils</span> <span class="kn">import</span> <span class="n">pause</span>
+<span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">selenium.common.exceptions</span> <span class="kn">import</span> <span class="n">NoSuchElementException</span><span class="p">,</span> <span class="n">TimeoutException</span>
 <span class="kn">from</span> <span class="nn">selenium.webdriver.common.by</span> <span class="kn">import</span> <span class="n">By</span>
 <span class="kn">from</span> <span class="nn">selenium.webdriver.common.keys</span> <span class="kn">import</span> <span class="n">Keys</span>
-<span class="kn">from</span> <span class="nn">selenium.webdriver.support.ui</span> <span class="kn">import</span> <span class="n">WebDriverWait</span>
 <span class="kn">from</span> <span class="nn">selenium.webdriver.support</span> <span class="kn">import</span> <span class="n">expected_conditions</span> <span class="k">as</span> <span class="n">EC</span>
-<span class="kn">from</span> <span class="nn">selenium.common.exceptions</span> <span class="kn">import</span> <span class="n">NoSuchElementException</span>
-<span class="kn">from</span> <span class="nn">selenium.common.exceptions</span> <span class="kn">import</span> <span class="n">TimeoutException</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">selenium.webdriver.support.ui</span> <span class="kn">import</span> <span class="n">WebDriverWait</span>
+
+<span class="kn">from</span> <span class="nn">autogroceries.shopper</span> <span class="kn">import</span> <span class="n">Shopper</span>
+<span class="kn">from</span> <span class="nn">autogroceries.utils</span> <span class="kn">import</span> <span class="n">pause</span>
 
 
 <div class="viewcode-block" id="SainsburysShopper"><a class="viewcode-back" href="../../../autoapi/autogroceries/shopper/index.html#autogroceries.shopper.SainsburysShopper.SainsburysShopper">[docs]</a><span class="k">class</span> <span class="nc">SainsburysShopper</span><span class="p">(</span><span class="n">Shopper</span><span class="p">):</span>
