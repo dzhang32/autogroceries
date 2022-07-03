@@ -1,12 +1,12 @@
-from autogroceries.shopper import Shopper
-from autogroceries.utils import pause
+import pandas as pd
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import NoSuchElementException
-from selenium.common.exceptions import TimeoutException
-import pandas as pd
+from selenium.webdriver.support.ui import WebDriverWait
+
+from autogroceries.shopper import Shopper
+from autogroceries.utils import pause
 
 
 class SainsburysShopper(Shopper):

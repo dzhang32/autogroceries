@@ -1,6 +1,6 @@
 import functools
-import time
 import random
+import time
 
 
 def pause(_func=None, *, delay=1, rand=1):

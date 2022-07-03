@@ -1,7 +1,9 @@
-import pytest
 import sys
-from autogroceries.shopper import Shopper
+
+import pytest
 from selenium.common.exceptions import InvalidSessionIdException
+
+from autogroceries.shopper import Shopper
 
 # TODO: check whether I should use @pytest.fixture instead here
 shopper = Shopper("https://www.sainsburys.co.uk", ["tomato", "lemon"])
@@ -59,7 +61,7 @@ def test_open_url_fails_works_after_open_driver():
     # TODO - figure out how to test selenium on GHA
     shopper._open_driver()
     shopper._open_url()
-    assert shopper.driver.title == "Sainsbury’s"
+    assert shopper.driver.title == "Sainsbury's"
 
 
 @pytest.mark.skipif(sys.platform == "linux", reason="skip selenium test on GHA")

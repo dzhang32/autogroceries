@@ -1,6 +1,7 @@
-from autogroceries.utils import pause
 import functools
 from timeit import default_timer
+
+from autogroceries.utils import pause
 
 
 # decorator timer used to test pause()
