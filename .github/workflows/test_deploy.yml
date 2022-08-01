@@ -18,7 +18,7 @@ jobs:
       matrix:
         os: [Ubuntu]
         python:
-          - 3.10
+          - "3.10"
 
     steps:
       - uses: actions/checkout@v2
