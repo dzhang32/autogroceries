@@ -134,9 +134,9 @@ class SainsburysShopper(Shopper):
     def _to_login(self):
         """Navigate to the Sainsbury's grocery account login page"""
 
-        login = self.driver.find_element_by_xpath("//span[text()='Log in']")
+        login = self.driver.find_element("xpath", "//span[text()='Log in']")
         login.click()
-        groceries = self.driver.find_element_by_xpath("//a[text()='Groceries account']")
+        groceries = self.driver.find_element("xpath", "//a[text()='Groceries account']")
         groceries.click()
 
     @pause
@@ -161,12 +161,12 @@ class SainsburysShopper(Shopper):
         self._accept_cookies()
 
         # enter UN and PW
-        un = self.driver.find_element_by_id("username")
+        un = self.driver.find_element("id", "username")
         un.send_keys(username)
-        pw = self.driver.find_element_by_id("password")
+        pw = self.driver.find_element("id", "password")
         pw.send_keys(password)
 
-        login = self.driver.find_element_by_xpath("//button[text()='Log in']")
+        login = self.driver.find_element("xpath", "//button[text()='Log in']")
         login.click()
 
         # two-step auth via email... need to think about how best
@@ -192,10 +192,10 @@ class SainsburysShopper(Shopper):
         """
 
         print("Searching for " + item)
-        search = self.driver.find_element_by_id("search-bar-input")
+        search = self.driver.find_element("id", "search-bar-input")
         search.send_keys(item)
-        search = self.driver.find_element_by_xpath(
-            "//button[@class='search-bar__button']"
+        search = self.driver.find_element(
+            "xpath", "//button[@class='search-bar__button']"
         )
         search.click()
 
@@ -209,8 +209,8 @@ class SainsburysShopper(Shopper):
         """
 
         try:
-            popup = self.driver.find_element_by_xpath(
-                "//a[@id='smg-etr-invitation-no']"
+            popup = self.driver.find_element(
+                "xpath", "//a[@id='smg-etr-invitation-no']"
             )
             popup.click()
         except NoSuchElementException:
@@ -241,8 +241,8 @@ class SainsburysShopper(Shopper):
         except TimeoutException:
             return None
 
-        products = self.driver.find_elements_by_xpath(
-            "//div[@class='ln-c-card pt pt-card']"
+        products = self.driver.find_elements(
+            "xpath", "//div[@class='ln-c-card pt pt-card']"
         )
 
         # for now, select the first 5 options - TODO make this user selected
@@ -283,7 +283,7 @@ class SainsburysShopper(Shopper):
             try:
                 # .// needed here, the . refers to ONLY search the current node
                 # https://github.com/seleniumhq/selenium-google-code-issue-archive/issues/5819
-                product.find_element_by_xpath(".//button[@class='pt__icons__fav']")
+                product.find_element("xpath", ".//button[@class='pt__icons__fav']")
                 selected_product = product
                 break
             except NoSuchElementException:
@@ -348,7 +348,7 @@ class SainsburysShopper(Shopper):
         """
 
         # needs to look in the current node, hence prefix with "." in ".//"
-        product_info = selected_product.find_element_by_xpath(".//a[@class='pt__link']")
+        product_info = selected_product.find_element("xpath", ".//a[@class='pt__link']")
         product_name = product_info.get_attribute("innerHTML")
 
         return product_name
@@ -364,7 +364,7 @@ class SainsburysShopper(Shopper):
             number of backspaces to send to the search box.
         """
 
-        search = self.driver.find_element_by_id("search-bar-input")
+        search = self.driver.find_element("id", "search-bar-input")
 
         # https://stackoverflow.com/questions/7732125/clear-text-from-textarea-with-selenium
         # methods using .clear() or .sendKeys(Keys.CONTROL + "a") didn't work
