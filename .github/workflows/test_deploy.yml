@@ -11,15 +11,14 @@ on:
 jobs:
   # modified from https://github.com/pypa/pip/blob/main/.github/workflows/ci.yml
   test-package:
-
     name: test / ${{ matrix.python }} / ${{ matrix.os }}
     runs-on: ${{ matrix.os }}-latest
     strategy:
       fail-fast: true
       matrix:
-        os: [ Ubuntu ]
+        os: [Ubuntu]
         python:
-          - 3.8
+          - 3.10
 
     steps:
       - uses: actions/checkout@v2
