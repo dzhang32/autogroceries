@@ -40,5 +40,8 @@ jobs:
       - name: Install package
         run: poetry install
 
-      - name: Run unit tests
-        run: poetry run python3 -m pytest tests/
+      - name: Install pytest
+        run: pip install pytest
+
+      - name: Install pytest
+        run: pytest tests/
