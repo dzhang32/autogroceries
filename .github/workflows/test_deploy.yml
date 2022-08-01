@@ -41,15 +41,4 @@ jobs:
         run: poetry install
 
       - name: Run unit tests
-        run: poetry run pytest tests/ --cov=autogroceries --cov-report=xml
-
-      - name: Build documentation
-        run: poetry run make html --directory docs/
-
-      - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@3.7.1
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH: gh-pages # The branch the action should deploy to.
-          FOLDER: docs/_build/html # The folder the action should deploy.
-          CLEAN: true # Automatically remove deleted files from the deploy branch
+        run: poetry run pytest tests/
