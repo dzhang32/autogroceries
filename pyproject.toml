@@ -1,10 +1,11 @@
 [project]
 name = "autogroceries"
 version = "1.0.3"
-description = "Automate your grocery shop"
+description = "Automate your grocery shop."
 authors = [
     { name = "David Zhang" },
 ]
+requires-python = ">=3.13"
 dependencies = [
     "playwright==1.54.0",
 ]
