@@ -1,0 +1,2 @@
+class TwoFactorAuthenticationRequiredError(Exception):
+    pass
