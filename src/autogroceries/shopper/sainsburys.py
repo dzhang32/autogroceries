@@ -21,7 +21,8 @@ class SainsburysShopper(Shopper):
             self._login()
             self._check_two_factor()
 
-            self._search_item("milk")
+            self._add_product("milk")
+            self.page.wait_for_timeout(30000)
 
     @pause
     def _handle_cookies(self, timeout: int = 3000) -> None:
@@ -40,11 +41,11 @@ class SainsburysShopper(Shopper):
 
     @pause
     def _login(self) -> None:
-        self.page.type("#username", self.username, delay=100)
-        self.page.type("#password", self.password, delay=100)
+        self.page.type("#username", self.username, delay=50)
+        self.page.type("#password", self.password, delay=50)
         self.page.locator("button:has-text('Log in')").click()
 
-    @pause(delay=20)
+    @pause
     def _check_two_factor(self) -> None:
         try:
             self.page.wait_for_selector(
@@ -59,9 +60,33 @@ class SainsburysShopper(Shopper):
             pass
 
     @pause
-    def _search_item(self, item: str) -> None:
-        self.page.locator("#search-bar-input").fill(item)
-        self.page.locator(".search-bar__button").click()
-        products = self.page.locator("div.ln-c-card.pt.pt-card")
-        for product in products:
-            print(product.text_content())
+    def _add_product(self, ingredient: str) -> None:
+        # There are two search inputs on the same page.
+        search_input = self.page.locator("#search-bar-input").first
+        search_input.type(ingredient, delay=50)
+        self.page.locator(".search-bar__button").first.click()
+
+        self.page.wait_for_selector(
+            ".product-tile-row",
+            state="visible",
+            timeout=10000,
+        )
+
+        products = self.page.locator('[data-testid^="product-tile-"]').all()
+
+        selected_product = None
+        for i, product in enumerate(products):
+            # Only check the first 5 products.
+            if i >= 5:
+                break
+
+            if i == 0:
+                selected_product = product
+
+            if product.locator("button.pt__icons__fav").is_visible():
+                selected_product = product
+
+        if selected_product:
+            selected_product.locator("button[data-testid='add-button']").click()
+
+        search_input.clear()

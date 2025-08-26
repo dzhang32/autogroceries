@@ -5,7 +5,8 @@ from playwright.sync_api import Page, Playwright
 
 class Shopper(ABC):
     USER_AGENT = (
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.6 Safari/605.1.15",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 "
+        "(KHTML, like Gecko) Version/17.6 Safari/605.1.15"
     )
 
     def __init__(self, username: str, password: str) -> None:
