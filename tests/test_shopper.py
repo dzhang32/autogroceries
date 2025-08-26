@@ -1,6 +1,6 @@
 import os
 
-from autogroceries.shopper import SainsburysShopper
+from autogroceries.shopper.sainsburys import SainsburysShopper
 
 
 def test_shopper():
@@ -8,4 +8,4 @@ def test_shopper():
         username=os.getenv("SAINSBURYS_USERNAME"),
         password=os.getenv("SAINSBURYS_PASSWORD"),
     )
-    shopper.shop(headless=False)
+    shopper.shop()
