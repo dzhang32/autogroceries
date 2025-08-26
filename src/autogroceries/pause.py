@@ -4,7 +4,7 @@ import time
 from typing import Callable
 
 
-def pause(_func=None, *, delay: int = 1) -> Callable:
+def pause(_func=None, *, delay: int = 2) -> Callable:
     def decorator_pause(func):
         @functools.wraps(func)
         def wrapper_pause(*args, **kwargs):
