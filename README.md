@@ -12,10 +12,12 @@ The goal of `autogroceries` is to automate your weekly grocery shop (from Sainsb
 
 ## Installation
 
- `autogroceries` was developed for for personal use and is no longer under active development. You can install the development version from `pypi`:
+I recommend using uv for python version, virtual environment and dependency management:
 
 ```bash
-pip install autogroceries
+uv venv --python 3.13
+source .venv/bin/activate
+uv pip install autogroceries
 ```
 
 ## Usage
