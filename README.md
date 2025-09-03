@@ -1,13 +1,5 @@
 ## autogroceries
 
-<!-- badges: start -->
-
-[![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![ci](https://github.com/dzhang32/autogroceries/workflows/test-deploy-package/badge.svg)](https://github.com/dzhang32/autogroceries/actions)
-[![PyPI](https://img.shields.io/pypi/v/autogroceries.svg)](https://pypi.python.org/pypi)
-<!-- badges: end -->
-
 The goal of `autogroceries` is to automate your weekly grocery shop (from Sainsbury's).
 
 ## Installation
