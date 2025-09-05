@@ -12,6 +12,8 @@ class SainsburysShopper(Shopper):
         """
         Assumes that the basket is initially empty.
         """
+        self.logger.info("----- Shopping at Sainsbury's -----")
+
         with sync_playwright() as p:
             self.page = self.setup_page(p)
 
@@ -27,14 +29,17 @@ class SainsburysShopper(Shopper):
             for ingredient, n in ingredients.items():
                 self._add_product(ingredient, n)
 
+        self.logger.info("----- Shopping complete -----")
+
     @pause
-    def _handle_cookies(self, timeout: int = 3000) -> None:
+    def _handle_cookies(self) -> None:
         try:
             button_selector = "button:has-text('Continue without accepting')"
-            self.page.wait_for_selector(button_selector, timeout=timeout)
+            self.page.wait_for_selector(button_selector, timeout=3000)
             self.page.locator(button_selector).click()
+            self.logger.info("Rejecting cookies")
         except TimeoutError:
-            # TODO: add logging.
+            self.logger.info("No cookies popup found")
             pass
 
     @pause
@@ -69,37 +74,51 @@ class SainsburysShopper(Shopper):
         search_input.type(ingredient, delay=50)
         self.page.locator(".search-bar__button").first.click()
 
-        self.page.wait_for_selector(
-            ".product-tile-row",
-            state="visible",
-            timeout=10000,
-        )
+        try:
+            # If no product found in 10s, skip this ingredient.
+            self.page.wait_for_selector(
+                ".product-tile-row",
+                state="visible",
+                timeout=10000,
+            )
 
-        products = self.page.locator('[data-testid^="product-tile-"]').all()
+            products = self.page.locator('[data-testid^="product-tile-"]').all()
 
-        selected_product = None
-        for i, product in enumerate(products):
-            # Only check the first 5 products.
-            if i >= 5:
-                break
+            selected_product = None
+            for i, product in enumerate(products):
+                # Only check the first 5 products.
+                if i >= 5:
+                    break
 
-            # Default to selecting the first product.
-            if i == 0:
-                selected_product = product
-
-            if product.locator("button[data-testid='favourite-icon-full']").count() > 0:
-                selected_product = product
-                break
-
-        if selected_product:
-            for i in range(n):
+                # Default to selecting the first product.
                 if i == 0:
-                    selected_product.locator("button[data-testid='add-button']").click(
-                        delay=100
-                    )
-                else:
-                    selected_product.locator(
-                        "button[data-testid='pt-button-inc']"
-                    ).click(delay=100)
+                    selected_product = product
+
+                # Prefer favourited products.
+                if (
+                    product.locator("button[data-testid='favourite-icon-full']").count()
+                    > 0
+                ):
+                    selected_product = product
+                    break
+
+            if selected_product:
+                product_name = selected_product.locator(
+                    ".pt__info__description"
+                ).text_content()
+                self.logger.info(f"{n} {ingredient.title()}: {product_name}")
+
+                for i in range(n):
+                    if i == 0:
+                        selected_product.locator(
+                            "button[data-testid='add-button']"
+                        ).click(delay=100)
+                    else:
+                        selected_product.locator(
+                            "button[data-testid='pt-button-inc']"
+                        ).click(delay=100)
+
+        except TimeoutError:
+            self.logger.warning(f"{n} {ingredient.title()}: no matching product found")
 
         search_input.clear()

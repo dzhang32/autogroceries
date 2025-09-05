@@ -3,21 +3,22 @@ from pathlib import Path
 
 
 def setup_logger(log_path: Path | None = None) -> logging.Logger:
-    formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(name)s - %(message)s")
+    formatter = logging.Formatter(
+        "%(asctime)s [%(levelname)s] - %(message)s", datefmt="%Y-%m-%d %H:%M:%S"
+    )
+    root_logger = logging.getLogger()
 
     if log_path:
         # Create directory in log_path if it does not exist.
         log_path.parent.mkdir(parents=True, exist_ok=True)
         file_handler = logging.FileHandler(log_path, encoding="utf-8")
         file_handler.setFormatter(formatter)
+        root_logger.addHandler(file_handler)
 
     stream_handler = logging.StreamHandler()
     stream_handler.setFormatter(formatter)
-
-    root_logger = logging.getLogger()
-    root_logger.setLevel(logging.INFO)
-
-    root_logger.addHandler(file_handler)
     root_logger.addHandler(stream_handler)
+
+    root_logger.setLevel(logging.INFO)
 
     return logging.getLogger(__name__)
