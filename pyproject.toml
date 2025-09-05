@@ -5,6 +5,8 @@ description = "Automate your grocery shop."
 authors = [
     { name = "David Zhang" },
 ]
+readme = "README.md"
+license = { file = "LICENSE" }
 requires-python = ">=3.13"
 dependencies = [
     "playwright==1.54.0",
