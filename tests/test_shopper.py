@@ -15,4 +15,4 @@ def test_shopper():
         username=os.getenv("SAINSBURYS_USERNAME"),
         password=os.getenv("SAINSBURYS_PASSWORD"),
     )
-    shopper.shop({"milk": 1, "egg": 2})
+    shopper.shop({"milk": 1, "egg": 2, "not_a_food": 2})

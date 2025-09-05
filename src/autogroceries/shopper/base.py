@@ -1,6 +1,9 @@
 from abc import ABC, abstractmethod
+from pathlib import Path
 
 from playwright.sync_api import Page, Playwright
+
+from autogroceries.logging import setup_logger
 
 
 class Shopper(ABC):
@@ -9,9 +12,12 @@ class Shopper(ABC):
         "(KHTML, like Gecko) Version/17.6 Safari/605.1.15"
     )
 
-    def __init__(self, username: str, password: str) -> None:
+    def __init__(
+        self, username: str, password: str, log_path: Path | None = None
+    ) -> None:
         self.username = username
         self.password = password
+        self.logger = setup_logger(log_path)
 
     def setup_page(self, p: Playwright) -> Page:
         # Try to avoid bot detection.
@@ -35,5 +41,5 @@ class Shopper(ABC):
         return context.new_page()
 
     @abstractmethod
-    def shop(self) -> None:
+    def shop(self, ingredients: dict[str, int]) -> None:
         pass
