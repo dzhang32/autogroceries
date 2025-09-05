@@ -1,44 +1,88 @@
-name: test-deploy-package
+
+name: test_deploy
 
 on:
   push:
-    branches:
-      - master
+    branches: [ main ]
+    tags: [ '*' ]
   pull_request:
-    branches:
-      - master
+    branches: [ main ]
+
+env:
+  PYTHON_VERSION: "3.13"
 
 jobs:
-  # modified from https://github.com/pypa/pip/blob/main/.github/workflows/ci.yml
-  test-package:
-    name: test / ${{ matrix.python }} / ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}-latest
-    strategy:
-      fail-fast: true
-      matrix:
-        os: [Ubuntu]
-        python:
-          - "3.10"
+  test:
+    runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python and install dependencies
+        uses: ./.github/actions/setup
         with:
-          python-version: ${{ matrix.python }}
+          python-version: ${{ env.PYTHON_VERSION }}
+          dependencies: dev
 
-      - name: Install Ubuntu dependencies
-        if: matrix.os == 'Ubuntu'
-        run: sudo apt-get install bzr
+      - name: Run tests
+        run: pytest
 
-      - name: Install MacOS dependencies
-        if: matrix.os == 'MacOS'
-        run: brew install bzr
+  deploy-docs:
+    runs-on: ubuntu-latest
 
-      - name: Install poetry
-        uses: snok/install-poetry@v1
+    # Do not run on git tag (i.e. releases).
+    # Only runs if tests pass.
+    if: ${{ !startsWith(github.ref, 'refs/tags/') }}
+    needs: [test]
 
-      - name: Install package
-        run: poetry install
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Run pytest
-        run: poetry run pytest tests/
+      - name: Setup Python and install dependencies
+        uses: ./.github/actions/setup
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          dependencies: docs
+
+      - name: Build documentation
+        run: |
+          cp README.md docs/index.md
+          # --strict errors on any warnings.
+          # builds the site to ./site.
+          mkdocs build --strict
+
+      - name: Deploy to GitHub Pages
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./site
+
+  deploy-pypi:
+    runs-on: ubuntu-latest
+
+    # Only runs on git tag and if tests pass.
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: [test]
+
+    # Authenticate for PyPI publishing.
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python and install dependencies
+        uses: ./.github/actions/setup
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          dependencies: build
+
+      - name: Build package
+        run: python -m build
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
