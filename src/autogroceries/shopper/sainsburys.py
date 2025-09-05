@@ -27,8 +27,6 @@ class SainsburysShopper(Shopper):
             for ingredient, n in ingredients.items():
                 self._add_product(ingredient, n)
 
-            self.page.wait_for_timeout(100000)
-
     @pause
     def _handle_cookies(self, timeout: int = 3000) -> None:
         try:
