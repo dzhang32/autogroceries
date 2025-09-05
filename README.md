@@ -1,4 +1,4 @@
-## autogroceries
+# autogroceries
 
 The goal of `autogroceries` is to automate your weekly grocery shop (from Sainsbury's).
 
