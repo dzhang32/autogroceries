@@ -8,7 +8,10 @@ from autogroceries.shopper.base import Shopper
 class SainsburysShopper(Shopper):
     URL = "https://www.sainsburys.co.uk"
 
-    def shop(self) -> None:
+    def shop(self, ingredients: dict[str, int]) -> None:
+        """
+        Assumes that the basket is initially empty.
+        """
         with sync_playwright() as p:
             self.page = self.setup_page(p)
 
@@ -21,8 +24,10 @@ class SainsburysShopper(Shopper):
             self._login()
             self._check_two_factor()
 
-            self._add_product("milk")
-            self.page.wait_for_timeout(30000)
+            for ingredient, n in ingredients.items():
+                self._add_product(ingredient, n)
+
+            self.page.wait_for_timeout(100000)
 
     @pause
     def _handle_cookies(self, timeout: int = 3000) -> None:
@@ -60,8 +65,8 @@ class SainsburysShopper(Shopper):
             pass
 
     @pause
-    def _add_product(self, ingredient: str) -> None:
-        # There are two search inputs on the same page.
+    def _add_product(self, ingredient: str, n: int) -> None:
+        # There are two search inputs on the same page, use the first.
         search_input = self.page.locator("#search-bar-input").first
         search_input.type(ingredient, delay=50)
         self.page.locator(".search-bar__button").first.click()
@@ -80,13 +85,23 @@ class SainsburysShopper(Shopper):
             if i >= 5:
                 break
 
+            # Default to selecting the first product.
             if i == 0:
                 selected_product = product
 
-            if product.locator("button.pt__icons__fav").is_visible():
+            if product.locator("button[data-testid='favourite-icon-full']").count() > 0:
                 selected_product = product
+                break
 
         if selected_product:
-            selected_product.locator("button[data-testid='add-button']").click()
+            for i in range(n):
+                if i == 0:
+                    selected_product.locator("button[data-testid='add-button']").click(
+                        delay=100
+                    )
+                else:
+                    selected_product.locator(
+                        "button[data-testid='pt-button-inc']"
+                    ).click(delay=100)
 
         search_input.clear()
