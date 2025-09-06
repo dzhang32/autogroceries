@@ -25,11 +25,12 @@ class SainsburysShopper(Shopper):
 
             self._login()
             self._check_two_factor()
+            self._check_empty_basket()
 
             for ingredient, n in ingredients.items():
                 self._add_product(ingredient, n)
 
-        self.logger.info("----- Shopping complete -----")
+        self.logger.info("----- Done -----")
 
     @pause
     def _handle_cookies(self) -> None:
@@ -66,6 +67,13 @@ class SainsburysShopper(Shopper):
         except TimeoutError:
             # TODO: add logging.
             pass
+
+    @pause
+    def _check_empty_basket(self) -> None:
+        if self.page.locator(".header-trolley ").count() > 0:
+            self.logger.warning(
+                "Basket is not initially empty. This may cause issues when adding products."
+            )
 
     @pause
     def _add_product(self, ingredient: str, n: int) -> None:
