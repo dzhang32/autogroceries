@@ -1,7 +1,7 @@
 from playwright.sync_api import TimeoutError, sync_playwright
 
+from autogroceries.delay import delay
 from autogroceries.exceptions import TwoFactorAuthenticationRequiredError
-from autogroceries.pause import pause
 from autogroceries.shopper.base import Shopper
 
 
@@ -43,7 +43,7 @@ class SainsburysShopper(Shopper):
 
         self.logger.info("----- Done -----")
 
-    @pause
+    @delay
     def _handle_cookies(self) -> None:
         """
         Handle the cookie pop up, which otherwise masks the rest of the page.
@@ -57,7 +57,7 @@ class SainsburysShopper(Shopper):
             self.logger.info("No cookies popup found")
             pass
 
-    @pause
+    @delay
     def _go_to_login(self) -> None:
         """
         Go to the login page.
@@ -65,7 +65,7 @@ class SainsburysShopper(Shopper):
         self.page.locator("text=Log in").click()
         self.page.locator("text=Groceries account").click()
 
-    @pause
+    @delay
     def _login(self) -> None:
         """
         Login with the provided username and password.
@@ -74,7 +74,7 @@ class SainsburysShopper(Shopper):
         self.page.type("#password", self.password, delay=50)
         self.page.locator("button:has-text('Log in')").click()
 
-    @pause
+    @delay
     def _check_two_factor(self) -> None:
         """
         Check if two-factor authentication is required.
@@ -95,7 +95,7 @@ class SainsburysShopper(Shopper):
             self.logger.info("Login successful (no two-factor authentication required)")
             pass
 
-    @pause
+    @delay
     def _check_empty_basket(self) -> None:
         """
         Check if basket is initially empty.
@@ -108,7 +108,7 @@ class SainsburysShopper(Shopper):
                 "Basket is not initially empty. This may cause issues when adding products."
             )
 
-    @pause
+    @delay
     def _add_ingredient(self, ingredient: str, n: int) -> None:
         """
         Search for and add product to basket matching a provided ingredient.
