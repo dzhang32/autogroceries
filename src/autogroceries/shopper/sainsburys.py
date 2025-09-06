@@ -113,8 +113,9 @@ class SainsburysShopper(Shopper):
         """
         Search for and add product to basket matching a provided ingredient.
 
-        ingredient: The ingredient you would like to buy.
-        n: The desired quantity of the ingredient.
+        Args:
+            ingredient: The ingredient you would like to buy.
+            n: The desired quantity of the ingredient.
         """
         # There are two search inputs on the same page, use the first.
         search_input = self.page.locator("#search-bar-input").first
