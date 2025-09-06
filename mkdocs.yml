@@ -1,0 +1,28 @@
+site_name: autogroceries
+site_description: autogroceries documentation
+site_author: David Zhang
+repo_url: https://github.com/dzhang32/autogroceries
+repo_name: dzhang32/autogroceries
+
+theme:
+  name: material
+  features:
+    # Organise top-level sections as tabs.
+    - navigation.tabs
+    # Enable search suggestions.
+    - search.suggest
+
+nav:
+  - Home: index.md
+  - API Reference: api.md
+
+plugins:
+  # Enable search.
+  - search
+  # Generate API reference from docstrings.
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: google
+            show_root_heading: true
