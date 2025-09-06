@@ -5,6 +5,12 @@ from typing import Callable
 
 
 def pause(_func=None, *, delay: int = 2) -> Callable:
+    """
+    Decorator that adds a random length pause to functions.
+
+    Intended to emulate human-like behaviour to avoid bot detection.
+    """
+
     def decorator_pause(func):
         @functools.wraps(func)
         def wrapper_pause(*args, **kwargs):

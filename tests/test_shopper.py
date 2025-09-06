@@ -10,7 +10,10 @@ from autogroceries.shopper.sainsburys import SainsburysShopper
     os.environ.get("GITHUB_ACTIONS") == "true",
     reason="Sainsburys website can't be tested in headless mode.",
 )
-def test_shopper():
+def test_sainsburys_shopper():
+    """
+    Test that the Sainsbury's shopper works correctly.
+    """
     shopper = SainsburysShopper(
         username=os.getenv("SAINSBURYS_USERNAME"),
         password=os.getenv("SAINSBURYS_PASSWORD"),
