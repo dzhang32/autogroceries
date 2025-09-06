@@ -62,7 +62,7 @@ class Shopper(ABC):
     @abstractmethod
     def shop(self, ingredients: dict[str, int]) -> None:
         """
-        Shop for a set of ingredients.
+        Shop for ingredients.
 
         Args:
             ingredients: Keys are the ingredients to add to the basket and values are

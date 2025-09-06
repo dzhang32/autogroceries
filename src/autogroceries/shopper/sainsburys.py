@@ -6,11 +6,22 @@ from autogroceries.shopper.base import Shopper
 
 
 class SainsburysShopper(Shopper):
+    """
+    Shops for ingredients at Sainsbury's.
+
+    __init__ is inherited from the `autogroceries.shopper.base.Shopper` abstract base
+    class.
+    """
+
     URL = "https://www.sainsburys.co.uk"
 
     def shop(self, ingredients: dict[str, int]) -> None:
         """
-        Assumes that the basket is initially empty.
+        Shop for ingredients at Sainsbury's.
+
+        Args:
+            ingredients: Keys are the ingredients to add to the basket and values are
+                the desired quantity of each ingredient.
         """
         self.logger.info("----- Shopping at Sainsbury's -----")
 
@@ -28,12 +39,15 @@ class SainsburysShopper(Shopper):
             self._check_empty_basket()
 
             for ingredient, n in ingredients.items():
-                self._add_product(ingredient, n)
+                self._add_ingredient(ingredient, n)
 
         self.logger.info("----- Done -----")
 
     @pause
     def _handle_cookies(self) -> None:
+        """
+        Handle the cookie pop up, which otherwise masks the rest of the page.
+        """
         try:
             button_selector = "button:has-text('Continue without accepting')"
             self.page.wait_for_selector(button_selector, timeout=3000)
@@ -45,17 +59,30 @@ class SainsburysShopper(Shopper):
 
     @pause
     def _go_to_login(self) -> None:
+        """
+        Go to the login page.
+        """
         self.page.locator("text=Log in").click()
         self.page.locator("text=Groceries account").click()
 
     @pause
     def _login(self) -> None:
+        """
+        Login with the provided username and password.
+        """
         self.page.type("#username", self.username, delay=50)
         self.page.type("#password", self.password, delay=50)
         self.page.locator("button:has-text('Log in')").click()
 
     @pause
     def _check_two_factor(self) -> None:
+        """
+        Check if two-factor authentication is required.
+
+        Raises:
+            TwoFactorAuthenticationRequiredError: If required, user must manually login
+                to their account first.
+        """
         try:
             self.page.wait_for_selector(
                 "text=Enter the code sent to your phone", timeout=3000
@@ -65,18 +92,30 @@ class SainsburysShopper(Shopper):
                 "manually then rerun autogroceries."
             )
         except TimeoutError:
-            # TODO: add logging.
+            self.logger.info("Login successful (no two-factor authentication required)")
             pass
 
     @pause
     def _check_empty_basket(self) -> None:
+        """
+        Check if basket is initially empty.
+
+        If basket not empty, autogroceries will error if it tries to add a product that
+        is already in the basket.
+        """
         if self.page.locator(".header-trolley ").count() > 0:
             self.logger.warning(
                 "Basket is not initially empty. This may cause issues when adding products."
             )
 
     @pause
-    def _add_product(self, ingredient: str, n: int) -> None:
+    def _add_ingredient(self, ingredient: str, n: int) -> None:
+        """
+        Search for and add product to basket matching a provided ingredient.
+
+        ingredient: The ingredient you would like to buy.
+        n: The desired quantity of the ingredient.
+        """
         # There are two search inputs on the same page, use the first.
         search_input = self.page.locator("#search-bar-input").first
         search_input.type(ingredient, delay=50)
