@@ -4,6 +4,10 @@ from autogroceries.pause import pause
 
 
 def test_pause() -> None:
+    """
+    Test that functions are paused correctly.
+    """
+
     @pause(delay=2)
     def f():
         pass
