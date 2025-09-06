@@ -1,14 +1,14 @@
 import time
 
-from autogroceries.pause import pause
+from autogroceries.delay import delay
 
 
-def test_pause() -> None:
+def test_delay() -> None:
     """
-    Test that functions are paused correctly.
+    Test that functions are delayed correctly.
     """
 
-    @pause(delay=2)
+    @delay(delay=2)
     def f():
         pass
 
