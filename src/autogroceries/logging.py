@@ -3,6 +3,15 @@ from pathlib import Path
 
 
 def setup_logger(log_path: Path | None = None) -> logging.Logger:
+    """
+    Setup logger.
+
+    Args:
+        log_path: Optional. If provided, will output log to this path.
+
+    Returns:
+        Logger with the desired configuration.
+    """
     formatter = logging.Formatter(
         "%(asctime)s [%(levelname)s] - %(message)s", datefmt="%Y-%m-%d %H:%M:%S"
     )
