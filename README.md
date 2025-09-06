@@ -1,10 +1,10 @@
 # autogroceries
 
-The goal of `autogroceries` is to automate your weekly grocery shop (from Sainsbury's).
+`autogroceries` simplifies grocery shopping from Sainsbury's by using [Playwright](https://playwright.dev/) to automate the addition of ingredients to your basket.
 
 ## Installation
 
-I recommend using uv for python version, virtual environment and dependency management:
+I recommend using [uv](https://docs.astral.sh/uv/) to manage the python version, virtual environment and `autogroceries` installation:
 
 ```bash
 uv venv --python 3.13
@@ -14,25 +14,20 @@ uv pip install autogroceries
 
 ## Usage
 
-`autogroceries` uses [Selenium](https://selenium-python.readthedocs.io) to interface with the Sainsbury's website, automatically filling your cart with an inputted list of ingredients.
-
-The below illustrates the minimal config required to run `autogroceries`.
+`autogroceries` uses [Playwright](https://playwright.dev/) to interface with the Sainsbury's website, automatically filling your cart with an inputted list of ingredients. The below demonstrates how to run `autogroceries`:
 
 ```python
-from autogroceries.shopper import SainsburysShopper
+from autogroceries.shopper.sainsburys import SainsburysShopper
 
-ingreds = ["cereal", "tomatoes", "lemon", "salad", "grapefruit"]
-n_ingreds = [1, 1, 2, 1, 3]
-sb = SainsburysShopper(ingreds, n_ingreds)
+ingredients = {"milk": 1, "egg": 2}
 
-# SainsburysShopper needs Sainsbury's grocery account username/email and password
-# for security, it's recommended to load these from a file
-# rather than inputting your credentials directly
-shopping_list = sb.shop("UN", "PW")
+# It is recommended to store your credentials in a secure .env file.
+shopper = SainsburysShopper(
+        username=os.getenv("SAINSBURYS_USERNAME"),
+        password=os.getenv("SAINSBURYS_PASSWORD"),
+    )
+
+shopper.shop({"milk": 1, "egg": 2, "not_a_food": 2})
 ```
 
 https://user-images.githubusercontent.com/32676710/173201096-95633b21-d023-439d-9d18-8d00d0e33c4a.mp4
-
-## Credits
-
-`autogroceries` was created with [`cookiecutter`](https://cookiecutter.readthedocs.io/en/latest/) and the `py-pkgs-cookiecutter` [template](https://github.com/py-pkgs/py-pkgs-cookiecutter).
