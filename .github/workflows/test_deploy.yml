@@ -49,11 +49,13 @@ jobs:
       - name: Build documentation
         run: |
           cp README.md docs/index.md
+          cp CHANGELOG.md docs/changelog.md
           # --strict errors on any warnings.
           # builds the site to ./site.
           mkdocs build --strict
 
       - name: Deploy to GitHub Pages
+        # Only trigger on push to main branch.
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: peaceiris/actions-gh-pages@v4
         with:

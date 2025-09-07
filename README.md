@@ -1,5 +1,9 @@
 # autogroceries
 
+[![test_deploy](https://github.com/dzhang32/autogroceries/actions/workflows/test_deploy.yml/badge.svg)](https://github.com/dzhang32/autogroceries/actions/workflows/test-deploy.yml)
+[![pypi](https://img.shields.io/pypi/v/autogroceries.svg)](https://pypi.org/project/autogroceries/)
+
+
 `autogroceries` simplifies grocery shopping from Sainsbury's by using [Playwright](https://playwright.dev/) to automate the addition of ingredients to your basket.
 
 ## Installation
@@ -14,7 +18,9 @@ uv pip install autogroceries
 
 ## Usage
 
-`autogroceries` uses [Playwright](https://playwright.dev/) to interface with the Sainsbury's website, automatically filling your cart with an inputted list of ingredients. The below demonstrates how to run `autogroceries`:
+`autogroceries` uses [Playwright](https://playwright.dev/) to interface with the Sainsbury's website, automatically filling your cart with an inputted list of ingredients.
+
+The below demonstrates how to run `autogroceries`:
 
 ```python
 from autogroceries.shopper.sainsburys import SainsburysShopper
@@ -27,7 +33,13 @@ shopper = SainsburysShopper(
         password=os.getenv("SAINSBURYS_PASSWORD"),
     )
 
-shopper.shop({"milk": 1, "egg": 2, "not_a_food": 2})
+shopper.shop(
+    {"cereal": 1, "tomatoes": 1, "lemon": 2, "salad": 1, "grapefruit": 3}
+    )
 ```
 
-https://user-images.githubusercontent.com/32676710/173201096-95633b21-d023-439d-9d18-8d00d0e33c4a.mp4
+The video below demonstrates how `Playwright` automates grocery shopping when running the example code above:
+
+<video src="https://user-images.githubusercontent.com/32676710/173201096-95633b21-d023-439d-9d18-8d00d0e33c4a.mp4" controls style="max-width: 100%; height: auto;">
+  Your browser does not support the video tag.
+</video>

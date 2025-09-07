@@ -1,6 +1,6 @@
 # Changelog
 
-## v2.0.0 (06/09/2025)
+## v2.0.0 (07/09/2025)
 
 - Refactor to use modern python practices:
 

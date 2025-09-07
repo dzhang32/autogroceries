@@ -15,6 +15,7 @@ theme:
 nav:
   - Home: index.md
   - API Reference: api.md
+  - Changelog: changelog.md
 
 plugins:
   # Enable search.
