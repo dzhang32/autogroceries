@@ -4,6 +4,7 @@ from pathlib import Path
 import click
 from dotenv import load_dotenv
 
+from autogroceries.exceptions import MissingCredentialsError
 from autogroceries.shopper.sainsburys import SainsburysShopper
 
 SHOPPERS = {
@@ -44,7 +45,9 @@ def autogroceries_cli(
     password = os.getenv("PASSWORD")
 
     if not username or not password:
-        raise ValueError("USERNAME and PASSWORD must be set in environment variables.")
+        raise MissingCredentialsError(
+            "USERNAME and PASSWORD for the store must be set as environment variables."
+        )
 
     shopper = SHOPPERS[store](
         username=username,
