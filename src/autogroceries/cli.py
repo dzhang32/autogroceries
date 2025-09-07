@@ -1,0 +1,65 @@
+import os
+from pathlib import Path
+
+import click
+from dotenv import load_dotenv
+
+from autogroceries.shopper.sainsburys import SainsburysShopper
+
+SHOPPERS = {
+    "sainsburys": SainsburysShopper,
+}
+
+
+@click.command(
+    help="""
+    autogroceries: Automate your grocery shopping using playwright.
+    """
+)
+@click.option(
+    "--store",
+    type=click.Choice(SHOPPERS.keys()),
+    required=True,
+    help="The store to shop at.",
+)
+@click.option(
+    "--ingredients-path",
+    type=click.Path(exists=True, path_type=Path),
+    required=True,
+    help="Path to csv file (without header) detailing ingredients. "
+    "Each line should in format 'ingredient,quantity' e.g. 'eggs,2'.",
+)
+@click.option(
+    "--log-path",
+    type=click.Path(path_type=Path),
+    required=False,
+    help="If provided, will output shopping log to this path.",
+)
+def autogroceries_cli(
+    store: str, ingredients_path: Path, log_path: Path | None
+) -> None:
+    load_dotenv()
+
+    username = os.getenv("USERNAME")
+    password = os.getenv("PASSWORD")
+
+    if not username or not password:
+        raise ValueError("USERNAME and PASSWORD must be set in environment variables.")
+
+    shopper = SHOPPERS[store](
+        username=username,
+        password=password,
+        log_path=log_path,
+    )
+
+    shopper.shop(read_ingredients(ingredients_path))
+
+
+def read_ingredients(ingredients_path: Path) -> dict[str, int]:
+    ingredients = {}
+    with open(ingredients_path, "r") as ingredients_file:
+        for ingredient_quantity in ingredients_file:
+            ingredient, quantity = ingredient_quantity.strip().split(",")
+            ingredients[ingredient] = int(quantity)
+
+    return ingredients
