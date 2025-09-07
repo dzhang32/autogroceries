@@ -9,6 +9,7 @@ readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.13"
 dependencies = [
+    "click==8.2.1",
     "playwright==1.54.0",
     "python-dotenv==1.1.1",
 ]
@@ -29,7 +30,7 @@ build = [
 ]
 
 [project.scripts]
-autogroceries = "autogroceries.__main__:cli"
+autogroceries = "autogroceries.cli:autogroceries_cli"
 
 [build-system]
 requires = ["hatchling"]
