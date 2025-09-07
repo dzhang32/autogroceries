@@ -3,7 +3,6 @@
 [![test_deploy](https://github.com/dzhang32/autogroceries/actions/workflows/test_deploy.yml/badge.svg)](https://github.com/dzhang32/autogroceries/actions/workflows/test-deploy.yml)
 [![pypi](https://img.shields.io/pypi/v/autogroceries.svg)](https://pypi.org/project/autogroceries/)
 
-
 `autogroceries` simplifies grocery shopping from Sainsbury's by using [Playwright](https://playwright.dev/) to automate the addition of ingredients to your basket.
 
 ## Installation
@@ -14,6 +13,8 @@ I recommend using [uv](https://docs.astral.sh/uv/) to manage the python version,
 uv venv --python 3.13
 source .venv/bin/activate
 uv pip install autogroceries
+# Install Chromium browser binary required for playwright.
+playwright install chromium
 ```
 
 ## Usage
@@ -27,7 +28,7 @@ from autogroceries.shopper.sainsburys import SainsburysShopper
 
 ingredients = {"milk": 1, "egg": 2}
 
-# It is recommended to store your credentials in a secure .env file.
+# Store credentials securely e.g. in environment variables (use python-dotenv).
 shopper = SainsburysShopper(
         username=os.getenv("SAINSBURYS_USERNAME"),
         password=os.getenv("SAINSBURYS_PASSWORD"),
