@@ -41,12 +41,15 @@ def autogroceries_cli(
 ) -> None:
     load_dotenv()
 
-    username = os.getenv("USERNAME")
-    password = os.getenv("PASSWORD")
+    # Get store credentials from environment variables.
+    store_username = f"{store.upper()}_USERNAME"
+    store_password = f"{store.upper()}_PASSWORD"
+    username = os.getenv(store_username)
+    password = os.getenv(store_password)
 
     if not username or not password:
         raise MissingCredentialsError(
-            "USERNAME and PASSWORD for the store must be set as environment variables."
+            f"{store_username} and {store_password} must be set as environment variables."
         )
 
     shopper = SHOPPERS[store](
