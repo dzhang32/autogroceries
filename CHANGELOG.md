@@ -7,7 +7,7 @@
     - `uv` for python packaging.
     - Revamp CI workflow.
     - Replace `selenium` with `Playwright`.
-    - Add use `ruff` and `mypy` for pre-commit hooks and add typehints.
+    - Add use `ruff` and `mypy` for pre-commit hooks and add type hints.
     - Improve code design and structure.
     - Add logging, docs and docstrings.
 
