@@ -8,14 +8,14 @@ def delay(_func=None, *, delay: int = 2) -> Callable:
     """
     Decorator that adds a random length delay before executing a function.
 
-    Intended to emulate human-like behaviour during browser interaction to avoid bot
-    detection.
+    Intended to emulate human-like behaviour during browser interaction to respect rate
+    limits.
     """
 
     def decorator_delay(func):
         @functools.wraps(func)
         def wrapper_delay(*args, **kwargs):
-            # Add a random delay (up to 0.5 seconds) to emulate a human.
+            # Add a random delay (up to 0.5 seconds).
             time.sleep(delay + random.uniform(0, 0.5))
             return func(*args, **kwargs)
 

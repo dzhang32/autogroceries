@@ -73,3 +73,10 @@ shopper.shop({"lemon": 1, "tomatoes": 2})
 <video src="https://user-images.githubusercontent.com/32676710/173201096-95633b21-d023-439d-9d18-8d00d0e33c4a.mp4" controls style="max-width: 100%; height: auto;">
   Your browser does not support the video tag.
 </video>
+
+## Disclaimer
+
+️`autogroceries` is developed for educational use only. Users are responsible for:
+- Following website's `robots.txt` and Terms of Service.
+- Using appropriate delays and respecting rate limits.
+- Complying with applicable laws.
