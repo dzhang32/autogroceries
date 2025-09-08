@@ -896,8 +896,7 @@
 <span class="normal">67</span>
 <span class="normal">68</span>
 <span class="normal">69</span>
-<span class="normal">70</span>
-<span class="normal">71</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Shopper</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="normal">70</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Shopper</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Abstract base class for a shopper.</span>
 
@@ -923,15 +922,14 @@
 
     <span class="k">def</span><span class="w"> </span><span class="nf">setup_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">Playwright</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Page</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Setup a Playwright page with configuration emulating a real human.</span>
+<span class="sd">        Setup a Playwright page with configuration.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            p: A Playwright instance.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            Playwright page with human-like user agent and context.</span>
+<span class="sd">            Playwright page with user agent and context.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Try to avoid bot detection.</span>
         <span class="n">browser</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">chromium</span><span class="o">.</span><span class="n">launch</span><span class="p">(</span>
             <span class="n">headless</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">args</span><span class="o">=</span><span class="p">[</span>
@@ -987,7 +985,7 @@
 
     <div class="doc doc-contents ">
 
-        <p>Setup a Playwright page with configuration emulating a real human.</p>
+        <p>Setup a Playwright page with configuration.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1036,7 +1034,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Playwright page with human-like user agent and context.</p>
+                <p>Playwright page with user agent and context.</p>
               </div>
             </td>
           </tr>
@@ -1072,18 +1070,16 @@
 <span class="normal">56</span>
 <span class="normal">57</span>
 <span class="normal">58</span>
-<span class="normal">59</span>
-<span class="normal">60</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">setup_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">Playwright</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Page</span><span class="p">:</span>
+<span class="normal">59</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">setup_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">Playwright</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Page</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Setup a Playwright page with configuration emulating a real human.</span>
+<span class="sd">    Setup a Playwright page with configuration.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        p: A Playwright instance.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        Playwright page with human-like user agent and context.</span>
+<span class="sd">        Playwright page with user agent and context.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Try to avoid bot detection.</span>
     <span class="n">browser</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">chromium</span><span class="o">.</span><span class="n">launch</span><span class="p">(</span>
         <span class="n">headless</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">args</span><span class="o">=</span><span class="p">[</span>
@@ -1159,7 +1155,8 @@ the desired quantity of each ingredient.</p>
 
             <details class="quote">
               <summary>Source code in <code>src/autogroceries/shopper/base.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">62</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">61</span>
+<span class="normal">62</span>
 <span class="normal">63</span>
 <span class="normal">64</span>
 <span class="normal">65</span>
@@ -1167,8 +1164,7 @@ the desired quantity of each ingredient.</p>
 <span class="normal">67</span>
 <span class="normal">68</span>
 <span class="normal">69</span>
-<span class="normal">70</span>
-<span class="normal">71</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@abstractmethod</span>
+<span class="normal">70</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@abstractmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">shop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ingredients</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Shop for ingredients.</span>
@@ -1774,8 +1770,8 @@ the desired quantity of each ingredient.</p>
     <div class="doc doc-contents ">
 
         <p>Decorator that adds a random length delay before executing a function.</p>
-<p>Intended to emulate human-like behaviour during browser interaction to avoid bot
-detection.</p>
+<p>Intended to emulate human-like behaviour during browser interaction to respect rate
+limits.</p>
 
 
             <details class="quote">
@@ -1804,14 +1800,14 @@ detection.</p>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Decorator that adds a random length delay before executing a function.</span>
 
-<span class="sd">    Intended to emulate human-like behaviour during browser interaction to avoid bot</span>
-<span class="sd">    detection.</span>
+<span class="sd">    Intended to emulate human-like behaviour during browser interaction to respect rate</span>
+<span class="sd">    limits.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">decorator_delay</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
         <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
         <span class="k">def</span><span class="w"> </span><span class="nf">wrapper_delay</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-            <span class="c1"># Add a random delay (up to 0.5 seconds) to emulate a human.</span>
+            <span class="c1"># Add a random delay (up to 0.5 seconds).</span>
             <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">delay</span> <span class="o">+</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
             <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 

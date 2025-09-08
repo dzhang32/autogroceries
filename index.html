@@ -392,6 +392,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#disclaimer" class="md-nav__link">
+    <span class="md-ellipsis">
+      Disclaimer
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -521,6 +530,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#disclaimer" class="md-nav__link">
+    <span class="md-ellipsis">
+      Disclaimer
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -543,7 +561,7 @@
 <h1 id="autogroceries">autogroceries</h1>
 <p><a href="https://github.com/dzhang32/autogroceries/actions/workflows/test_deploy.yml"><img alt="test_deploy" src="https://github.com/dzhang32/autogroceries/actions/workflows/test_deploy.yml/badge.svg" /></a>
 <a href="https://pypi.org/project/autogroceries/"><img alt="pypi" src="https://img.shields.io/pypi/v/autogroceries.svg" /></a></p>
-<p><code>autogroceries</code> simplifies grocery shopping from Sainsbury's by using <a href="https://playwright.dev/">Playwright</a> to automate the addition of ingredients to your basket.</p>
+<p><code>autogroceries</code> simplifies grocery shopping by using <a href="https://playwright.dev/">Playwright</a> to automate the addition of ingredients to your basket.</p>
 <h2 id="installation">Installation</h2>
 <p>I recommend using <a href="https://docs.astral.sh/uv/">uv</a> to manage the python version, virtual environment and <code>autogroceries</code> installation:</p>
 <pre><code class="language-bash">uv venv --python 3.13
@@ -566,12 +584,14 @@ Usage: autogroceries [OPTIONS]
   caps e.g. SAINSBURYS_USERNAME.
 
 Options:
-  --store [sainsburys]     The store to shop at.  [required]
-  --ingredients-path PATH  Path to csv file (without header) detailing
-                           ingredients. Each line should in format
-                           'ingredient,quantity' e.g. 'eggs,2'.  [required]
-  --log-path PATH          If provided, will output shopping log to this path.
-  --help                   Show this message and exit.
+  --store [sainsburys|waitrose]  The store to shop at.  [required]
+  --ingredients-path PATH        Path to csv file (without header) detailing
+                                 ingredients. Each line should in format
+                                 'ingredient,quantity' e.g. 'eggs,2'.
+                                 [required]
+  --log-path PATH                If provided, will output shopping log to this
+                                 path.
+  --help                         Show this message and exit.
 </code></pre>
 <p>The <code>autogroceries</code> CLI expects a <code>.env</code> file in the same directory from where you execute the command. This <code>.env</code> will be loaded by <a href="https://pypi.org/project/python-dotenv/">python-dotenv</a> and should define the "[STORE]_USERNAME" and "[STORE]_PASSWORD" variables, with "[STORE]" replaced by the name of the store in uppercase, for instance:</p>
 <pre><code class="language-bash"># .env
@@ -579,7 +599,8 @@ SAINSBURYS_USERNAME=your_username
 SAINSBURYS_PASSWORD=your_password
 </code></pre>
 <h3 id="python-package">Python package</h3>
-<p><code>autogroceries</code> can be used as a Python package, making it easy to integrate automated grocery shopping into scripts or pipelines:</p>
+<p><code>autogroceries</code> can be used as a Python package, making it easy to integrate automated grocery shopping into scripts or pipelines.</p>
+<p>There are currently two available <code>Shopper</code>s, <code>autogroceries.shopper.sainsburys.SainsburysShopper</code> and <code>autogroceries.shopper.waitrose.WaitroseShopper</code>. All <code>Shopper</code>s have a <code>shop</code> method which takes as input a dictionary of ingredients and the desired quantity of each, for example:</p>
 <pre><code class="language-python">from autogroceries.shopper.sainsburys import SainsburysShopper
 
 # Store credentials securely e.g. in environment variables (loaded with python-dotenv).
@@ -594,6 +615,14 @@ shopper.shop({&quot;lemon&quot;: 1, &quot;tomatoes&quot;: 2})
 <video src="https://user-images.githubusercontent.com/32676710/173201096-95633b21-d023-439d-9d18-8d00d0e33c4a.mp4" controls style="max-width: 100%; height: auto;">
   Your browser does not support the video tag.
 </video>
+
+<h2 id="disclaimer">Disclaimer</h2>
+<p>️<code>autogroceries</code> is developed for <strong>educational use only</strong>. Users are responsible for:</p>
+<ul>
+<li>Following website's <code>robots.txt</code> and Terms of Service.</li>
+<li>Using appropriate delays and respecting rate limits.</li>
+<li>Complying with applicable laws.</li>
+</ul>
 
 
 
