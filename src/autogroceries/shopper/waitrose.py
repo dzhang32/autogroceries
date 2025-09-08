@@ -1,4 +1,4 @@
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import TimeoutError, sync_playwright
 
 from autogroceries.delay import delay
 from autogroceries.shopper.base import Shopper
@@ -26,13 +26,9 @@ class WaitroseShopper(Shopper):
             self._go_to_login()
 
             self._login()
-            """
-            self._check_two_factor()
-            self._check_empty_basket()
 
             for ingredient, n in ingredients.items():
                 self._add_ingredient(ingredient, n)
-            """
 
         self.logger.info("----- Done -----")
 
@@ -59,3 +55,63 @@ class WaitroseShopper(Shopper):
         self.page.type("#email", self.username, delay=50)
         self.page.type("#password", self.password, delay=50)
         self.page.locator("button#loginSubmit").click()
+
+    @delay
+    def _add_ingredient(self, ingredient: str, n: int) -> None:
+        """
+        Search for and add product to basket matching a provided ingredient.
+
+        Args:
+            ingredient: The ingredient you would like to buy.
+            n: The desired quantity of the ingredient.
+        """
+        search_input = self.page.locator("input[data-element='search-term']")
+        search_input.type(ingredient, delay=50)
+        search_input.press("Enter")
+
+        try:
+            # If no product found in 10s, skip this ingredient.
+            self.page.wait_for_selector(
+                "[data-testid='product-list']",
+                state="visible",
+                timeout=10000,
+            )
+
+            products = self.page.locator('[data-testid="product-pod"]').all()
+
+            selected_product = None
+            for i, product in enumerate(products):
+                # Only check the first 5 products.
+                if i >= 5:
+                    break
+
+                # Default to selecting the first product.
+                if i == 0:
+                    selected_product = product
+
+                # Prefer favourited products.
+                # If favourited, product will have a remove (from favourites) button.
+                if product.locator("button[data-actiontype='remove']").count() > 0:
+                    selected_product = product
+                    break
+
+            if selected_product:
+                product_name = selected_product.locator(
+                    "[data-testid='product-pod-name']"
+                ).text_content()
+                self.logger.info(f"{n} {ingredient.title()}: {product_name}")
+
+                for i in range(n):
+                    if i == 0:
+                        selected_product.locator(
+                            "button[data-testid='addButton']"
+                        ).click(delay=100)
+                    else:
+                        selected_product.locator(
+                            "button[data-testid='trolleyPlusButton']"
+                        ).click(delay=100)
+
+        except TimeoutError:
+            self.logger.warning(f"{n} {ingredient.title()}: no matching product found")
+
+        search_input.clear()
