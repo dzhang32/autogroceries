@@ -32,15 +32,14 @@ class Shopper(ABC):
 
     def setup_page(self, p: Playwright) -> Page:
         """
-        Setup a Playwright page with configuration emulating a real human.
+        Setup a Playwright page with configuration.
 
         Args:
             p: A Playwright instance.
 
         Returns:
-            Playwright page with human-like user agent and context.
+            Playwright page with user agent and context.
         """
-        # Try to avoid bot detection.
         browser = p.chromium.launch(
             headless=False,
             args=[
