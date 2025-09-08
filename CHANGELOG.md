@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.1.0 (08/09/2025)
+
+- Add CLI for running `autogroceries`.
+
 ## v2.0.0 (07/09/2025)
 
 - Refactor to use modern python practices:
