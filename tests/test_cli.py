@@ -47,4 +47,4 @@ def test_read_ingredients(ingredients_path: Path) -> None:
     """
     Test that ingredients are read correctly from a csv file.
     """
-    assert read_ingredients(ingredients_path) == {"eggs": 2, "milk": 1}
+    assert read_ingredients(ingredients_path) == {"eggs": 2, "milk": 1, "not_a_food": 2}
