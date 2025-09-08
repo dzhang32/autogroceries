@@ -80,7 +80,8 @@ shopper.shop({"lemon": 1, "tomatoes": 2})
 
 ## Disclaimer
 
-️`autogroceries` is developed for educational use only. Users are responsible for:
+️`autogroceries` is developed for **educational use only**. Users are responsible for:
+
 - Following website's `robots.txt` and Terms of Service.
 - Using appropriate delays and respecting rate limits.
 - Complying with applicable laws.
