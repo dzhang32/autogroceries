@@ -17,9 +17,8 @@ SHOPPERS = {
     Automate your grocery shopping using playwright.
 
     Please set the [STORE]_USERNAME and [STORE]_PASSWORD in a .env file in the same
-    directory you run the autogroceries. Replace [STORE] with the store name in caps
-    e.g. SAINSBURYS_USERNAME. These credentials will loaded as environment variables
-    using python-dotenv.
+    directory you run autogroceries. Replace [STORE] with the store name in caps
+    e.g. SAINSBURYS_USERNAME.
     """
 )
 @click.option(

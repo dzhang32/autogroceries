@@ -19,27 +19,56 @@ playwright install chromium
 
 ## Usage
 
-`autogroceries` uses [Playwright](https://playwright.dev/) to interface with the Sainsbury's website, automatically filling your cart with an inputted list of ingredients.
+`autogroceries` uses [Playwright](https://playwright.dev/) to interface with the Sainsbury's website, automatically filling your cart with an inputted list of ingredients. `autogroceries` can be used as a CLI tool or a python package.
 
-The below demonstrates how to run `autogroceries`:
+### CLI
+
+`autogroceries` has a single CLI command:
+
+```bash
+❯ autogroceries --help
+Usage: autogroceries [OPTIONS]
+
+  Automate your grocery shopping using playwright.
+
+  Please set the [STORE]_USERNAME and [STORE]_PASSWORD in a .env file in the
+  same directory you run autogroceries. Replace [STORE] with the store name in
+  caps e.g. SAINSBURYS_USERNAME.
+
+Options:
+  --store [sainsburys]     The store to shop at.  [required]
+  --ingredients-path PATH  Path to csv file (without header) detailing
+                           ingredients. Each line should in format
+                           'ingredient,quantity' e.g. 'eggs,2'.  [required]
+  --log-path PATH          If provided, will output shopping log to this path.
+  --help                   Show this message and exit.
+```
+
+The `autogroceries` CLI expects a `.env` file in the same directory from where you execute the command. This `.env` will be loaded by [python-dotenv](https://pypi.org/project/python-dotenv/) and should define the "[STORE]_USERNAME" and "[STORE]_PASSWORD" variables, with "[STORE]" replaced by the name of the store in uppercase, for instance:
+
+```bash
+# .env
+SAINSBURYS_USERNAME=your_username
+SAINSBURYS_PASSWORD=your_password
+```
+
+### Python package
+
+`autogroceries` can be used as a Python package, making it easy to integrate automated grocery shopping into scripts or pipelines:
 
 ```python
 from autogroceries.shopper.sainsburys import SainsburysShopper
 
-ingredients = {"milk": 1, "egg": 2}
-
-# Store credentials securely e.g. in environment variables (use python-dotenv).
+# Store credentials securely e.g. in environment variables (loaded with python-dotenv).
 shopper = SainsburysShopper(
         username=os.getenv("SAINSBURYS_USERNAME"),
         password=os.getenv("SAINSBURYS_PASSWORD"),
     )
 
-shopper.shop(
-    {"cereal": 1, "tomatoes": 1, "lemon": 2, "salad": 1, "grapefruit": 3}
-    )
+shopper.shop({"lemon": 1, "tomatoes": 2})
 ```
 
-The video below demonstrates how `Playwright` automates grocery shopping when running the example code above:
+## Demo: autogroceries in action
 
 <video src="https://user-images.githubusercontent.com/32676710/173201096-95633b21-d023-439d-9d18-8d00d0e33c4a.mp4" controls style="max-width: 100%; height: auto;">
   Your browser does not support the video tag.
