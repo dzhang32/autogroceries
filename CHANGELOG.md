@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.2.0 (08/09/2025)
+
+- Add `WaitroseShopper`.
+
 ## v2.1.0 (08/09/2025)
 
 - Add CLI for running `autogroceries`.
