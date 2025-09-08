@@ -18,26 +18,29 @@ def ingredients_path(test_data_dir: Path) -> Path:
 # GHA autosets GITHUB_ACTIONS env var to true.
 @pytest.mark.skipif(
     os.environ.get("GITHUB_ACTIONS") == "true",
-    reason="Sainsburys website can't be tested in headless mode.",
+    reason="Store websites can't be tested in headless mode.",
 )
-def test_autogroceries_cli(ingredients_path: Path, tmp_path: Path) -> None:
+@pytest.mark.parametrize("store", ["sainsburys", "waitrose"])
+def test_autogroceries_cli(store: str, ingredients_path: Path, tmp_path: Path) -> None:
     """
     Test the autogroceries CLI works correctly.
     """
+    log_path = tmp_path / "test_dir" / "test.log"
     runner = CliRunner()
     result = runner.invoke(
         autogroceries_cli,
         [
             "--store",
-            "sainsburys",
+            store,
             "--ingredients-path",
             str(ingredients_path),
             "--log-path",
-            str(tmp_path / "test_dir" / "test.log"),
+            str(log_path),
         ],
     )
 
     assert result.exit_code == 0
+    assert log_path.exists()
 
 
 def test_read_ingredients(ingredients_path: Path) -> None:

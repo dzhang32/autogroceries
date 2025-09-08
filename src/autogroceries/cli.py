@@ -6,9 +6,11 @@ from dotenv import load_dotenv
 
 from autogroceries.exceptions import MissingCredentialsError
 from autogroceries.shopper.sainsburys import SainsburysShopper
+from autogroceries.shopper.waitrose import WaitroseShopper
 
 SHOPPERS = {
     "sainsburys": SainsburysShopper,
+    "waitrose": WaitroseShopper,
 }
 
 
