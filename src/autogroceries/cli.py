@@ -14,7 +14,12 @@ SHOPPERS = {
 
 @click.command(
     help="""
-    autogroceries: Automate your grocery shopping using playwright.
+    Automate your grocery shopping using playwright.
+
+    Please set the [STORE]_USERNAME and [STORE]_PASSWORD in a .env file in the same
+    directory you run the autogroceries. Replace [STORE] with the store name in caps
+    e.g. SAINSBURYS_USERNAME. These credentials will loaded as environment variables
+    using python-dotenv.
     """
 )
 @click.option(
@@ -62,7 +67,19 @@ def autogroceries_cli(
 
 
 def read_ingredients(ingredients_path: Path) -> dict[str, int]:
+    """
+    Read ingredients from a csv file.
+
+    Args:
+        ingredients_path: Path to csv file (without header) detailing ingredients. Each
+            line should in format 'ingredient,quantity' e.g. 'eggs,2'.
+
+    Returns:
+        Keys are the ingredients to add to the basket and values are the desired
+        quantity of each ingredient.
+    """
     ingredients = {}
+
     with open(ingredients_path, "r") as ingredients_file:
         for ingredient_quantity in ingredients_file:
             ingredient, quantity = ingredient_quantity.strip().split(",")
