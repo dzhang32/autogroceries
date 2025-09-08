@@ -1,6 +1,6 @@
 # autogroceries
 
-[![test_deploy](https://github.com/dzhang32/autogroceries/actions/workflows/test_deploy.yml/badge.svg)](https://github.com/dzhang32/autogroceries/actions/workflows/test-deploy.yml)
+[![test_deploy](https://github.com/dzhang32/autogroceries/actions/workflows/test_deploy.yml/badge.svg)](https://github.com/dzhang32/autogroceries/actions/workflows/test_deploy.yml)
 [![pypi](https://img.shields.io/pypi/v/autogroceries.svg)](https://pypi.org/project/autogroceries/)
 
 `autogroceries` simplifies grocery shopping from Sainsbury's by using [Playwright](https://playwright.dev/) to automate the addition of ingredients to your basket.
