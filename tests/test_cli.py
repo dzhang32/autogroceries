@@ -9,6 +9,9 @@ from autogroceries.cli import autogroceries_cli, read_ingredients
 
 @pytest.fixture
 def ingredients_path(test_data_dir: Path) -> Path:
+    """
+    Path to the test ingredients csv file.
+    """
     return test_data_dir / "test_cli" / "ingredients.csv"
 
 
@@ -37,7 +40,7 @@ def test_autogroceries_cli(ingredients_path: Path, tmp_path: Path) -> None:
     assert result.exit_code == 0
 
 
-def test_read_ingredients(ingredients_path: Path):
+def test_read_ingredients(ingredients_path: Path) -> None:
     """
     Test that ingredients are read correctly from a csv file.
     """
