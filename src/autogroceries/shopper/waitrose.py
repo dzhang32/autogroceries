@@ -15,6 +15,13 @@ class WaitroseShopper(Shopper):
     URL = "https://www.waitrose.com"
 
     def shop(self, ingredients: dict[str, int]) -> None:
+        """
+        Shop for ingredients at Waitrose.
+
+        Args:
+            ingredients: Keys are the ingredients to add to the basket and values are
+                the desired quantity of each ingredient.
+        """
         self.logger.info("----- Shopping at Waitrose -----")
 
         with sync_playwright() as p:
@@ -48,10 +55,16 @@ class WaitroseShopper(Shopper):
 
     @delay
     def _go_to_login(self) -> None:
+        """
+        Go to the login page.
+        """
         self.page.locator("text=Sign in").click()
 
     @delay
     def _login(self) -> None:
+        """
+        Login with the provided username and password.
+        """
         self.page.type("#email", self.username, delay=50)
         self.page.type("#password", self.password, delay=50)
         self.page.locator("button#loginSubmit").click()
