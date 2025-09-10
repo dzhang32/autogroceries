@@ -357,30 +357,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Usage">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#cli" class="md-nav__link">
-    <span class="md-ellipsis">
-      CLI
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#python-package" class="md-nav__link">
-    <span class="md-ellipsis">
-      Python package
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
@@ -495,30 +471,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Usage">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#cli" class="md-nav__link">
-    <span class="md-ellipsis">
-      CLI
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#python-package" class="md-nav__link">
-    <span class="md-ellipsis">
-      Python package
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
@@ -571,9 +523,8 @@ uv pip install autogroceries
 playwright install chromium
 </code></pre>
 <h2 id="usage">Usage</h2>
-<p><code>autogroceries</code> uses <a href="https://playwright.dev/">Playwright</a> to interface with the Sainsbury's website, automatically filling your cart with an inputted list of ingredients. <code>autogroceries</code> can be used as a CLI tool or a python package.</p>
-<h3 id="cli">CLI</h3>
-<p><code>autogroceries</code> has a single CLI command:</p>
+<p><code>autogroceries</code> uses <a href="https://playwright.dev/">Playwright</a> to interface with the Sainsbury's website, automatically filling your cart with an inputted list of ingredients.</p>
+<p><code>autogroceries</code> is designed to be used as a CLI tool, with a single command:</p>
 <pre><code class="language-bash">❯ autogroceries --help
 Usage: autogroceries [OPTIONS]
 
@@ -586,8 +537,8 @@ Usage: autogroceries [OPTIONS]
 Options:
   --store [sainsburys|waitrose]  The store to shop at.  [required]
   --ingredients-path PATH        Path to csv file (without header) detailing
-                                 ingredients. Each line should in format
-                                 'ingredient,quantity' e.g. 'eggs,2'.
+                                 ingredients. Each line should be in the
+                                 format 'ingredient,quantity' e.g. 'eggs,2'.
                                  [required]
   --log-path PATH                If provided, will output shopping log to this
                                  path.
@@ -597,19 +548,6 @@ Options:
 <pre><code class="language-bash"># .env
 SAINSBURYS_USERNAME=your_username
 SAINSBURYS_PASSWORD=your_password
-</code></pre>
-<h3 id="python-package">Python package</h3>
-<p><code>autogroceries</code> can be used as a Python package, making it easy to integrate automated grocery shopping into scripts or pipelines.</p>
-<p>There are currently two available <code>Shopper</code>s, <code>autogroceries.shopper.sainsburys.SainsburysShopper</code> and <code>autogroceries.shopper.waitrose.WaitroseShopper</code>. All <code>Shopper</code>s have a <code>shop</code> method which takes as input a dictionary of ingredients and the desired quantity of each, for example:</p>
-<pre><code class="language-python">from autogroceries.shopper.sainsburys import SainsburysShopper
-
-# Store credentials securely e.g. in environment variables (loaded with python-dotenv).
-shopper = SainsburysShopper(
-        username=os.getenv(&quot;SAINSBURYS_USERNAME&quot;),
-        password=os.getenv(&quot;SAINSBURYS_PASSWORD&quot;),
-    )
-
-shopper.shop({&quot;lemon&quot;: 1, &quot;tomatoes&quot;: 2})
 </code></pre>
 <h2 id="demo-autogroceries-in-action">Demo: autogroceries in action</h2>
 <video src="https://user-images.githubusercontent.com/32676710/173201096-95633b21-d023-439d-9d18-8d00d0e33c4a.mp4" controls style="max-width: 100%; height: auto;">
