@@ -34,7 +34,7 @@ SHOPPERS = {
     type=click.Path(exists=True, path_type=Path),
     required=True,
     help="Path to csv file (without header) detailing ingredients. "
-    "Each line should in format 'ingredient,quantity' e.g. 'eggs,2'.",
+    "Each line should be in the format 'ingredient,quantity' e.g. 'eggs,2'.",
 )
 @click.option(
     "--log-path",
