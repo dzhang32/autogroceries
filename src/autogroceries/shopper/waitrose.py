@@ -94,8 +94,8 @@ class WaitroseShopper(Shopper):
 
             selected_product = None
             for i, product in enumerate(products):
-                # Only check the first 5 products.
-                if i >= 5:
+                # Only check the first 10 products.
+                if i >= 10:
                     break
 
                 # Default to selecting the first product.
