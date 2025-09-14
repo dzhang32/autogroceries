@@ -1,6 +1,6 @@
 [project]
 name = "autogroceries"
-version = "2.2.1"
+version = "2.2.2"
 description = "Automate your grocery shop."
 authors = [
     { name = "David Zhang" },
