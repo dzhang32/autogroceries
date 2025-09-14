@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.2.2 (14/09/2025)
+
+- Increase the number of products checked to 10.
+
 ## v2.2.1 (08/09/2025)
 
 - Minor documentation updates.
