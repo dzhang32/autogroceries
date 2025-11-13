@@ -47,15 +47,39 @@ class SainsburysShopper(Shopper):
     def _handle_cookies(self) -> None:
         """
         Handle the cookie pop up, which otherwise masks the rest of the page.
+
+        Tries multiple selectors to handle different cookie banner variations.
         """
+        # First try to click "Required only" if present (use .first to handle multiple matches)
         try:
-            button_selector = "button:has-text('Continue without accepting')"
-            self.page.wait_for_selector(button_selector, timeout=3000)
-            self.page.locator(button_selector).click()
-            self.logger.info("Rejecting cookies")
+            self.logger.info("Looking for 'Required only' button")
+            required_only_selector = "button:has-text('Required only')"
+            self.page.wait_for_selector(required_only_selector, timeout=3000)
+            self.page.locator(required_only_selector).first.click(timeout=5000)
+            self.logger.info("Clicked 'Required only' button")
+            return
         except TimeoutError:
-            self.logger.info("No cookies popup found")
             pass
+
+        # Multiple possible cookie banner button selectors
+        cookie_selectors = [
+            "button:has-text('Continue without accepting')",
+            "button:has-text('Reject all')",
+            "button:has-text('Close')",
+            "[data-testid='cookie-reject-button']",
+            "#onetrust-reject-all-handler",
+        ]
+
+        for selector in cookie_selectors:
+            try:
+                self.page.wait_for_selector(selector, timeout=3000)
+                self.page.locator(selector).click()
+                self.logger.info(f"Clicked cookie button: {selector}")
+                return
+            except TimeoutError:
+                continue
+
+        self.logger.info("No cookies popup found")
 
     @delay
     def _go_to_login(self) -> None:
@@ -72,7 +96,11 @@ class SainsburysShopper(Shopper):
         """
         self.page.type("#username", self.username, delay=50)
         self.page.type("#password", self.password, delay=50)
-        self.page.locator("button:has-text('Log in')").click()
+
+        # Wait for login button to be enabled (form validation)
+        login_button = self.page.locator("button[data-testid='log-in']")
+        login_button.wait_for(state="visible", timeout=10000)
+        login_button.click()
 
     @delay
     def _check_two_factor(self) -> None:
@@ -103,6 +131,12 @@ class SainsburysShopper(Shopper):
         If basket not empty, autogroceries will error if it tries to add a product that
         is already in the basket.
         """
+        # Wait for page to fully load after login
+        try:
+            self.page.wait_for_selector("#search-bar-input", timeout=10000)
+        except TimeoutError:
+            self.logger.warning("Search bar not found - page may not have loaded")
+
         if self.page.locator(".header-trolley ").count() > 0:
             self.logger.warning(
                 "Basket is not initially empty. This may cause issues when adding products."
