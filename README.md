@@ -19,7 +19,7 @@ playwright install chromium
 
 ## Usage
 
-`autogroceries` uses [Playwright](https://playwright.dev/) to interface with the Sainsbury's website, automatically filling your cart with an inputted list of ingredients.
+`autogroceries` uses [Playwright](https://playwright.dev/) to interface with the Sainsbury's or Waitrose website, automatically filling your cart with an inputted list of ingredients.
 
 `autogroceries` is designed to be used as a CLI tool, with a single command:
 
