@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.2.3 (26/12/2025)
+
+- Update cookie and login handling to match Sainsbury website update.
+
 ## v2.2.2 (14/09/2025)
 
 - Increase the number of products checked to 10.
