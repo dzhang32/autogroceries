@@ -133,7 +133,9 @@ class SainsburysShopper(Shopper):
         """
         # Wait for page to fully load after login
         try:
-            self.page.wait_for_selector("#search-bar-input", timeout=10000)
+            self.page.wait_for_selector(
+                '[data-testid="search-bar-input"] input', timeout=10000
+            )
         except TimeoutError:
             self.logger.warning("Search bar not found - page may not have loaded")
 
@@ -152,9 +154,11 @@ class SainsburysShopper(Shopper):
             n: The desired quantity of the ingredient.
         """
         # There are two search inputs on the same page, use the first.
-        search_input = self.page.locator("#search-bar-input").first
+        search_input = self.page.locator('[data-testid="search-bar-input"] input').first
         search_input.type(ingredient, delay=50)
-        self.page.locator(".search-bar__button").first.click()
+        self.page.locator(
+            '[data-testid="search-bar-input"] button[type="submit"]'
+        ).first.click()
 
         try:
             # If no product found in 10s, skip this ingredient.
