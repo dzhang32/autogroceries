@@ -1457,7 +1457,11 @@ class.</p>
 <span class="normal">203</span>
 <span class="normal">204</span>
 <span class="normal">205</span>
-<span class="normal">206</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">SainsburysShopper</span><span class="p">(</span><span class="n">Shopper</span><span class="p">):</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">SainsburysShopper</span><span class="p">(</span><span class="n">Shopper</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Shops for ingredients at Sainsbury&#39;s.</span>
 
@@ -1585,7 +1589,9 @@ class.</p>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Wait for page to fully load after login</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">wait_for_selector</span><span class="p">(</span><span class="s2">&quot;#search-bar-input&quot;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">wait_for_selector</span><span class="p">(</span>
+                <span class="s1">&#39;[data-testid=&quot;search-bar-input&quot;] input&#39;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10000</span>
+            <span class="p">)</span>
         <span class="k">except</span> <span class="ne">TimeoutError</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Search bar not found - page may not have loaded&quot;</span><span class="p">)</span>
 
@@ -1604,9 +1610,11 @@ class.</p>
 <span class="sd">            n: The desired quantity of the ingredient.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># There are two search inputs on the same page, use the first.</span>
-        <span class="n">search_input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">locator</span><span class="p">(</span><span class="s2">&quot;#search-bar-input&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">first</span>
+        <span class="n">search_input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">locator</span><span class="p">(</span><span class="s1">&#39;[data-testid=&quot;search-bar-input&quot;] input&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">first</span>
         <span class="n">search_input</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="n">ingredient</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">locator</span><span class="p">(</span><span class="s2">&quot;.search-bar__button&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">locator</span><span class="p">(</span>
+            <span class="s1">&#39;[data-testid=&quot;search-bar-input&quot;] button[type=&quot;submit&quot;]&#39;</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="c1"># If no product found in 10s, skip this ingredient.</span>
