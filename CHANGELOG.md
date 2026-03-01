@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.2.4 (01/03/2026)
+
+- Fix Sainsbury's search bar selector to match website update.
+
 ## v2.2.3 (26/12/2025)
 
 - Update cookie and login handling to match Sainsbury website update.
